@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">NailApptApp</string>
+    <string name="signin">Bejelentkezés</string>
+    <string name="email">Email</string>
+    <string name="signup">Regisztráció</string>
+    <string name="password">Jelszó</string>
+    <string name="pwdagain">Jelszó megerősítése</string>
+    <string name="surname">Vezetéknév</string>
+    <string name="firstname">Keresztnév</string>
+    <string name="phoneNum">Telefonszám</string>
+    <string name="or">vagy</string>
+    <string name="loginWithGoogle">Bejelentkezés Google fiókkal</string>
+</resources>
