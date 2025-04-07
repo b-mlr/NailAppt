@@ -11,4 +11,6 @@
     <string name="or">vagy</string>
     <string name="loginWithGoogle">Bejelentkezés Google fiókkal</string>
     <string name="continueAsGuest">Folytatás vendégként</string>
+    <string name="pink_banner">Pink banner</string>
+    <string name="welcome">Üdvözöljük!</string>
 </resources>
