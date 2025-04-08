@@ -42,13 +42,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/pinkBanner" />
 
+    <androidx.constraintlayout.widget.Barrier
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editTextEmailLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:textColorHint="@color/md_theme_onSurface"
         app:boxBackgroundMode="outline"
         app:boxCornerRadiusBottomEnd="16dp"
         app:boxCornerRadiusBottomStart="16dp"
@@ -56,9 +60,12 @@
         app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeColor="@color/md_theme_onPrimaryContainer"
         app:boxStrokeWidth="2dp"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
+        app:layout_constraintVertical_bias="0.458"
+        app:passwordToggleTint="@color/md_theme_onPrimaryContainer"
+        tools:layout_editor_absoluteX="30dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextEmail"
@@ -74,7 +81,6 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editTextPasswordLayout"
         android:layout_width="match_parent"
@@ -87,9 +93,13 @@
         app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeColor="@color/md_theme_onPrimaryContainer"
         app:boxStrokeWidth="2dp"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmailLayout"
-        app:layout_constraintVertical_bias="0.035">
+        app:layout_constraintVertical_bias="0.035"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/md_theme_onPrimaryContainer"
+        tools:layout_editor_absoluteX="30dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextPassword"
@@ -123,11 +133,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/or"
-        android:textColor="@color/md_theme_onSurface"
+        android:textColor="@color/md_theme_onSurfaceVariant_mediumContrast"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton"
-        app:layout_constraintVertical_bias="0.035" />
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
     <Button
         android:id="@+id/googleSignInButton"

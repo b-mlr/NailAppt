@@ -6,7 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowInsetsAnimation;
+import android.text.TextWatcher;
+import android.text.Editable;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -24,6 +25,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +39,8 @@ public class SignInActivity extends AppCompatActivity {
     private static final int SECRET_KEY = 12;
     TextInputEditText emailET;
     TextInputEditText passwordET;
+    TextInputLayout editTextEmailLayoutET;
+    TextInputLayout editTextPasswordLayoutET;
     private SharedPreferences preferences;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -48,16 +52,48 @@ public class SignInActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_signin);
 
-        emailET = findViewById(R.id.editTextEmail);
-        passwordET = findViewById(R.id.editTextPassword);
-
-        preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.signin), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        emailET = findViewById(R.id.editTextEmail);
+        passwordET = findViewById(R.id.editTextPassword);
+        editTextPasswordLayoutET = findViewById(R.id.editTextPasswordLayout);
+        editTextEmailLayoutET = findViewById(R.id.editTextEmailLayout);
+
+        emailET.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(editTextEmailLayoutET.getError() != null){
+                    editTextEmailLayoutET.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        passwordET.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(editTextPasswordLayoutET.getError() != null){
+                    editTextPasswordLayoutET.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -79,20 +115,33 @@ public class SignInActivity extends AppCompatActivity {
         String email = emailET.getText().toString();
         String password = passwordET.getText().toString();
 
-
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
+        if(!email.trim().isEmpty() && !password.trim().isEmpty() ) {
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
+                if (task.isSuccessful()) {
                     Log.i(LOG_TAG, "Successful login: " + email);
                     goToMain();
                 } else {
-                    Log.d(LOG_TAG,"Login unsuccessful!");
-                    Toast.makeText(SignInActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
+                    Log.d(LOG_TAG, "Login unsuccessful!");
+                    editTextEmailLayoutET.setError(" ");
+                    editTextPasswordLayoutET.setError("Hibás email-cím vagy jelszó! Próbálja újra!");
                 }
+            });
+        } else {
+            if(email.trim().isEmpty()) {
+                emailET.setText("");
+                editTextEmailLayoutET.setError("A mező kitöltése kötelező!");
+
             }
-        });
+            if(password.trim().isEmpty()) {
+                passwordET.setText("");
+                editTextPasswordLayoutET.setError("A mező kitöltése kötelező!");
+            }
+        }
     }
+
+
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -115,16 +164,13 @@ public class SignInActivity extends AppCompatActivity {
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken,null);
-        mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Log.i(LOG_TAG, "Successful Google login: " + idToken);
-                    goToMain();
-                } else {
-                    Log.d(LOG_TAG, "Google sign in failed!");
-                    Toast.makeText(SignInActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
-                }
+        mAuth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
+            if(task.isSuccessful()){
+                Log.i(LOG_TAG, "Successful Google login: " + idToken);
+                goToMain();
+            } else {
+                Log.d(LOG_TAG, "Google sign in failed!");
+                Toast.makeText(SignInActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
             }
         });
 
@@ -132,16 +178,13 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void loginAsGuest(View view) {
-        mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Log.i(LOG_TAG, "Successful login: guest user");
-                    goToMain();
-                } else {
-                    Log.d(LOG_TAG,"Login unsuccessful!");
-                    Toast.makeText(SignInActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
-                }
+        mAuth.signInAnonymously().addOnCompleteListener(this, task -> {
+            if(task.isSuccessful()){
+                Log.i(LOG_TAG, "Successful login: guest user");
+                goToMain();
+            } else {
+                Log.d(LOG_TAG,"Login unsuccessful!");
+                Toast.makeText(SignInActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
             }
         });
     }
