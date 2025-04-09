@@ -12,4 +12,5 @@
     <string name="or">vagy</string>
     <string name="loginWithGoogle">Bejelentkezés Google fiókkal</string>
     <string name="continueAsGuest">Folytatás vendégként</string>
+    <string name="back">Back</string>
 </resources>

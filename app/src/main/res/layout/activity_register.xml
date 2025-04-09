@@ -30,14 +30,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="50dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
         app:boxCornerRadiusBottomEnd="16dp"
         app:boxCornerRadiusBottomStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
         app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeWidth="2dp"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/editTextPasswordLayout"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintVertical_chainStyle="packed"
@@ -58,15 +58,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="20dp"
         app:boxCornerRadiusBottomEnd="16dp"
         app:boxCornerRadiusBottomStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
         app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeWidth="2dp"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/editTextPasswordAgainLayout"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmailLayout"
         app:layout_constraintVertical_chainStyle="packed"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/md_theme_onTertiaryContainer"
         tools:layout_editor_absoluteX="30dp">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -84,14 +86,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="20dp"
         app:boxCornerRadiusBottomEnd="16dp"
         app:boxCornerRadiusBottomStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
         app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeWidth="2dp"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/editTextSurnameLayout"
         app:layout_constraintTop_toBottomOf="@+id/editTextPasswordLayout"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/md_theme_onTertiaryContainer"
         tools:layout_editor_absoluteX="30dp">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -109,14 +113,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="20dp"
         app:boxCornerRadiusBottomEnd="16dp"
         app:boxCornerRadiusBottomStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
         app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeWidth="2dp"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/editTextFirstNameLayout"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordAgainLayout">
+        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordAgainLayout"
+        tools:layout_editor_absoluteX="30dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextSurname"
@@ -133,14 +138,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="20dp"
         app:boxCornerRadiusBottomEnd="16dp"
         app:boxCornerRadiusBottomStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
         app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeWidth="2dp"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toTopOf="@id/editTextPhoneNumLayout"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSurnameLayout">
+        app:layout_constraintTop_toBottomOf="@+id/editTextSurnameLayout"
+        tools:layout_editor_absoluteX="30dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextFirstName"
@@ -157,14 +163,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="20dp"
         app:boxCornerRadiusBottomEnd="16dp"
         app:boxCornerRadiusBottomStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
         app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeWidth="2dp"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toTopOf="@id/regButton"
-        app:layout_constraintTop_toBottomOf="@+id/editTextFirstNameLayout">
+        app:layout_constraintTop_toBottomOf="@+id/editTextFirstNameLayout"
+        tools:layout_editor_absoluteX="30dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextPhoneNum"
@@ -203,8 +210,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:backgroundTint="#00FFFFFF"
-            android:onClick="back"
             android:padding="15dp"
+            android:contentDescription="@string/back"
+            android:onClick="back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

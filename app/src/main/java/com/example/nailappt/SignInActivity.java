@@ -8,10 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.text.TextWatcher;
 import android.text.Editable;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -22,14 +22,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -39,8 +40,10 @@ public class SignInActivity extends AppCompatActivity {
     private static final int SECRET_KEY = 12;
     TextInputEditText emailET;
     TextInputEditText passwordET;
-    TextInputLayout editTextEmailLayoutET;
-    TextInputLayout editTextPasswordLayoutET;
+    TextInputLayout emailETLO;
+    TextInputLayout passwordETLO;
+
+    Button loginBtn;
     private SharedPreferences preferences;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -60,8 +63,9 @@ public class SignInActivity extends AppCompatActivity {
 
         emailET = findViewById(R.id.editTextEmail);
         passwordET = findViewById(R.id.editTextPassword);
-        editTextPasswordLayoutET = findViewById(R.id.editTextPasswordLayout);
-        editTextEmailLayoutET = findViewById(R.id.editTextEmailLayout);
+        passwordETLO = findViewById(R.id.editTextPasswordLayout);
+        emailETLO = findViewById(R.id.editTextEmailLayout);
+        loginBtn =findViewById(R.id.loginButton);
 
         emailET.addTextChangedListener(new TextWatcher(){
             @Override
@@ -69,13 +73,22 @@ public class SignInActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(editTextEmailLayoutET.getError() != null){
-                    editTextEmailLayoutET.setError(null);
+                if(emailETLO.getError() != null){
+                    emailETLO.setError(null);
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+                Pattern pattern;
+                Matcher matcher;
+                String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+                pattern = Pattern.compile(EMAIL_PATTERN);
+                matcher = pattern.matcher(s);
+                if (!(matcher.matches()) && !s.toString().isEmpty()) {
+                    emailETLO.setError("Az email-cím formátuma helytelen!");
+                }
+            }
         });
 
         passwordET.addTextChangedListener(new TextWatcher(){
@@ -84,13 +97,14 @@ public class SignInActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(editTextPasswordLayoutET.getError() != null){
-                    editTextPasswordLayoutET.setError(null);
+                if(passwordETLO.getError() != null){
+                    passwordETLO.setError(null);
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
@@ -115,26 +129,28 @@ public class SignInActivity extends AppCompatActivity {
         String email = emailET.getText().toString();
         String password = passwordET.getText().toString();
 
-        if(!email.trim().isEmpty() && !password.trim().isEmpty() ) {
+        if(!email.trim().isEmpty() && !password.trim().isEmpty() ){
+            if(emailETLO.getError() != "Az email-cím formátuma helytelen!"){
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
                 if (task.isSuccessful()) {
                     Log.i(LOG_TAG, "Successful login: " + email);
                     goToMain();
                 } else {
                     Log.d(LOG_TAG, "Login unsuccessful!");
-                    editTextEmailLayoutET.setError(" ");
-                    editTextPasswordLayoutET.setError("Hibás email-cím vagy jelszó! Próbálja újra!");
+                    emailETLO.setError(" ");
+                    passwordETLO.setError("Hibás email-cím vagy jelszó! Próbálja újra!");
                 }
             });
+            }
         } else {
             if(email.trim().isEmpty()) {
                 emailET.setText("");
-                editTextEmailLayoutET.setError("A mező kitöltése kötelező!");
+                emailETLO.setError("A mező kitöltése kötelező!");
 
             }
             if(password.trim().isEmpty()) {
                 passwordET.setText("");
-                editTextPasswordLayoutET.setError("A mező kitöltése kötelező!");
+                passwordETLO.setError("A mező kitöltése kötelező!");
             }
         }
     }
