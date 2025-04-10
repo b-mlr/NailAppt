@@ -1,6 +1,9 @@
 package com.example.nailappt;
 
 import android.os.Bundle;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +12,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class HomeActivity extends AppCompatActivity {
+    ImageView polIcon;
+    Animation blink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,5 +25,11 @@ public class HomeActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
+        polIcon = findViewById(R.id.polIcon);
+        blink = AnimationUtils.loadAnimation(this, R.anim.blink);
+
+        polIcon.startAnimation(blink);
     }
 }

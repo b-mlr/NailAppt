@@ -81,6 +81,10 @@ public class RegisterActivity extends AppCompatActivity {
         emailET.setText(email);
         passwordET.setText(password);
 
+        if(!password.isEmpty() && passwordET.length() < 6){
+            passwordETLO.setError("A jelszónak min. 6 karakter hosszúnak kell lennie!");
+        }
+
         mAuth = FirebaseAuth.getInstance();
 
         emailET.addTextChangedListener(new TextWatcher(){
@@ -188,13 +192,14 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(surnameETLO.getError() != null){
-                    surnameETLO.setError(null);
+                if(phoneETLO.getError() != null){
+                    phoneETLO.setError(null);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+
             }
         });
     }
@@ -226,10 +231,16 @@ public class RegisterActivity extends AppCompatActivity {
                 mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         Log.i(LOG_TAG, "User created successfully!");
+                        Toast.makeText(getApplicationContext(), "Sikeres regisztráció!", Toast.LENGTH_SHORT).show();
                         goToHome();
                     } else {
                         Log.d(LOG_TAG, "There was an issue while creating the user!");
-                        Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        phoneETLO.setError(task.getException().getMessage());
+                        emailETLO.setError(" ");
+                        passwordETLO.setError(" ");
+                        passwordAgainETLO.setError(" ");
+                        surnameETLO.setError(" ");
+                        firstNameETLO.setError(" ");
                     }
                 });
             }
