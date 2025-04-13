@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/jaldi"
-        android:text="Folytatás a 2. mérföldkőben..."
+        android:text="@string/tbc"
         android:textColor="@color/md_theme_onSecondaryContainer"
         android:textSize="34sp"
         android:textStyle="bold"

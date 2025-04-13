@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/signin"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/md_theme_background"
     android:fadingEdge="horizontal|vertical"
     android:fadingEdgeLength="30dp"
     android:windowSoftInputMode="adjustResize"
     tools:context=".SignInActivity">
+
 
     <ImageView
         android:id="@+id/pinkBanner"
@@ -17,10 +22,11 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/pink_banner"
         android:src="@drawable/splash4"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEmailLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0" />
 
     <TextView
         android:id="@+id/welcomeText"
@@ -41,10 +47,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/pinkBanner" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editTextEmailLayout"
@@ -62,9 +64,7 @@
         app:errorEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.458"
-        app:passwordToggleTint="@color/md_theme_onPrimaryContainer"
-        tools:layout_editor_absoluteX="30dp">
+        app:passwordToggleTint="@color/md_theme_onPrimaryContainer">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextEmail"
@@ -96,8 +96,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextEmailLayout"
         app:layout_constraintVertical_bias="0.035"
         app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/md_theme_onPrimaryContainer"
-        tools:layout_editor_absoluteX="30dp">
+        app:passwordToggleTint="@color/md_theme_onPrimaryContainer">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextPassword"
@@ -170,18 +169,17 @@
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:onClick="register"
         android:text="@string/signup"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guestSignInButton"
-        app:layout_constraintVertical_bias="0.035" />
+        app:layout_constraintVertical_bias="0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
