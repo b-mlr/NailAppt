@@ -16,4 +16,14 @@
     <string name="back">Back</string>
     <string name="nail_polish_icon">nail polish icon</string>
     <string name="tbc">Folytatás a 2. mérföldkőben…</string>
+    <string name="home">Főoldal</string>
+    <string name="reserved_appointments">Lefoglalt időpontok</string>
+    <string name="addappointment">Időpont hirdetése</string>
+    <string name="postedappointments">Meghirdetett időpontok</string>
+    <string name="advertise">Hirdetéseim</string>
+    <string name="profile">Profil</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="chooseday">Válassz egy napot!</string>
+    <string name="freeappointments">Szabad időpontok</string>
 </resources>

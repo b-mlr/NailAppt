@@ -13,17 +13,21 @@
         android:theme="@style/Base.Theme.NailAppt"
         tools:targetApi="31">
         <activity
-            android:name=".HomeActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:name=".ProfileActivity"
             android:exported="false" />
+        <activity android:name=".BaseActivity" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".RegisterActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SignInActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/advertise"
+        android:icon="@drawable/ic_advert"
+        android:title="@string/advertise"
+        ></item>
+    <item
+        android:id="@+id/booking"
+        android:icon="@drawable/ic_calendar"
+        android:title="Foglalás"></item>
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/profile"></item>
+</menu>

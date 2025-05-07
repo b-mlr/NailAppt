@@ -119,8 +119,9 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 
-    private void goToMain(){
-        Intent intent = new Intent(this, HomeActivity.class);
+    private void goToBase(){
+        Intent intent = new Intent(this, BaseActivity.class);
+        intent.putExtra("fragmentToOpen", "booking");
         startActivity(intent);
     }
 
@@ -134,7 +135,7 @@ public class SignInActivity extends AppCompatActivity {
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
                 if (task.isSuccessful()) {
                     Log.i(LOG_TAG, "Successful login: " + email);
-                    goToMain();
+                    goToBase();
                 } else {
                     Log.d(LOG_TAG, "Login unsuccessful!");
                     emailETLO.setError(" ");
@@ -183,7 +184,7 @@ public class SignInActivity extends AppCompatActivity {
         mAuth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
             if(task.isSuccessful()){
                 Log.i(LOG_TAG, "Successful Google login: " + idToken);
-                goToMain();
+                goToBase();
             } else {
                 Log.d(LOG_TAG, "Google sign in failed!");
                 Toast.makeText(SignInActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
@@ -197,7 +198,7 @@ public class SignInActivity extends AppCompatActivity {
         mAuth.signInAnonymously().addOnCompleteListener(this, task -> {
             if(task.isSuccessful()){
                 Log.i(LOG_TAG, "Successful login: guest user");
-                goToMain();
+                goToBase();
             } else {
                 Log.d(LOG_TAG,"Login unsuccessful!");
                 Toast.makeText(SignInActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();

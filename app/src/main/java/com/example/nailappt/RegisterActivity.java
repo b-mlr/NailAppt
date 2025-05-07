@@ -38,7 +38,6 @@ public class RegisterActivity extends AppCompatActivity {
     TextInputLayout surnameETLO;
     TextInputLayout firstNameETLO;
     TextInputLayout phoneETLO;
-
     private SharedPreferences preferences;
     private FirebaseAuth mAuth;
 
@@ -230,6 +229,29 @@ public class RegisterActivity extends AppCompatActivity {
 
                 mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
+                        String uid = task.getResult().getUser().getUid();
+
+                        User newUser = new User(
+                                uid,
+                                email,
+                                firstName,
+                                surname
+                        );
+
+                        if(!phone.isEmpty() ){
+                            newUser.setPhone(phone);
+                        }
+
+                        UserRepository userRepo = new UserRepository();
+
+                        userRepo.createUser(newUser).addOnCompleteListener( userCreation -> {
+                            if(userCreation.isSuccessful()){
+                                Log.i(LOG_TAG, "Firebase létrehozás sikeres!");
+                            } else {
+                                Log.i(LOG_TAG, "Firebase létrehozás sikertelen!");
+                            }
+                        });
+
                         Log.i(LOG_TAG, "User created successfully!");
                         Toast.makeText(getApplicationContext(), "Sikeres regisztráció!", Toast.LENGTH_SHORT).show();
                         goToHome();
