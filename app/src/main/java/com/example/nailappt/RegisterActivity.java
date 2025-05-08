@@ -207,8 +207,9 @@ public class RegisterActivity extends AppCompatActivity {
         finish();
     }
 
-    private void goToHome(){
-        Intent intent = new Intent(this, HomeActivity.class);
+    private void goToBase(){
+        Intent intent = new Intent(this, BaseActivity.class);
+        intent.putExtra("fragmentToOpen", "booking");
         startActivity(intent);
     }
 
@@ -246,15 +247,15 @@ public class RegisterActivity extends AppCompatActivity {
 
                         userRepo.createUser(newUser).addOnCompleteListener( userCreation -> {
                             if(userCreation.isSuccessful()){
-                                Log.i(LOG_TAG, "Firebase létrehozás sikeres!");
+                                Log.i(LOG_TAG, "Firebase user létrehozás sikeres!");
                             } else {
-                                Log.i(LOG_TAG, "Firebase létrehozás sikertelen!");
+                                Log.i(LOG_TAG, "Firebase user létrehozás sikertelen!");
                             }
                         });
 
                         Log.i(LOG_TAG, "User created successfully!");
                         Toast.makeText(getApplicationContext(), "Sikeres regisztráció!", Toast.LENGTH_SHORT).show();
-                        goToHome();
+                        goToBase();
                     } else {
                         Log.d(LOG_TAG, "There was an issue while creating the user!");
                         phoneETLO.setError(task.getException().getMessage());

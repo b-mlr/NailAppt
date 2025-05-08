@@ -39,7 +39,6 @@ public class BaseActivity extends AppCompatActivity {
                 selectedFragment = new BookingFragment();
             } else if (itemId == R.id.profile) {
                 Intent intent = new Intent(this, ProfileActivity.class);
-                // Elkerülöd, hogy újraindítsa, ha már ott vagy
                 startActivity(intent);
                 return true;
             }
