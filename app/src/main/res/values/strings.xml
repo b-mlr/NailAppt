@@ -33,4 +33,5 @@
     <string name="postcode">Irányítószám</string>
     <string name="add">Létrehozás</string>
     <string name="othercontact">Egyéb kapcsolat (pl: instagram)</string>
+    <string name="reservation">Foglalás</string>
 </resources>

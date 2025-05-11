@@ -113,7 +113,6 @@
                 android:id="@+id/editTextTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
                 android:hint="@string/time"
                 android:inputType="time" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -135,7 +134,7 @@
                 android:id="@+id/editTextPostCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
+                android:maxLength="4"
                 android:hint="@string/postcode"
                 android:inputType="textPostalAddress" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -157,7 +156,7 @@
                 android:id="@+id/editTextCity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
+                android:maxLength="100"
                 android:hint="@string/address1"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -179,7 +178,7 @@
                 android:id="@+id/editTextAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
+                android:maxLength="100"
                 android:hint="@string/cím2"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -223,7 +222,7 @@
                 android:id="@+id/editTextOtherContact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
+                android:maxLength="255"
                 android:hint="@string/othercontact"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>

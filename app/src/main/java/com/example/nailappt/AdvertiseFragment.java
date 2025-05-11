@@ -3,12 +3,22 @@ package com.example.nailappt;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firestore.v1.Document;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +26,14 @@ import com.google.android.material.button.MaterialButton;
  * create an instance of this fragment.
  */
 public class AdvertiseFragment extends Fragment {
+    private static final String LOG_TAG = AdvertiseFragment.class.getName();
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser =  mAuth.getCurrentUser();
+    private final AppointmentRepository appointmentRepo = new AppointmentRepository();
+
+    private RecyclerView adRW;
+    private ArrayList<Appointment> mAppointmentList = new ArrayList<>();
+    private AppointmentAdapter mAdapter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,6 +73,18 @@ public class AdvertiseFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+        if( currentUser != null) {
+            Log.d(LOG_TAG,"Belépett felhasználó");
+        } else {
+            Log.d(LOG_TAG,"Nem belépett felhasználó");
+        }
+
+        if(mAppointmentList != null){
+            mAppointmentList.clear();
+        }
+
     }
 
     @Override
@@ -69,9 +99,39 @@ public class AdvertiseFragment extends Fragment {
             startActivity(intent);
         });
 
+        mAdapter = new AppointmentAdapter(requireContext(), mAppointmentList);
+
+        adRW = view.findViewById(R.id.adRecycler);
+        adRW.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        adRW.setAdapter(mAdapter);
+
+
+        Log.d(LOG_TAG, "Appointments list size: " + mAppointmentList.size());
+
+
+
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAppointmentList.clear();
+        appointmentRepo.getPostedAppointments(currentUser.getUid())
+                .addOnSuccessListener(querySnapshot -> {
 
+                    for (DocumentSnapshot document : querySnapshot){
+                        Appointment appointment = document.toObject(Appointment.class);
+                        mAppointmentList.add(appointment);
+                    }
+                    mAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> Log.e(LOG_TAG, "Hiba a lekérdezésben: ", e));
+    }
 
+    @Override
+    public void onDestroy() {
+        mAppointmentList.clear();
+        super.onDestroy();
+    }
 }

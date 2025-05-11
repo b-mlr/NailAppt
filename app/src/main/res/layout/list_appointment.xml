@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_margin="5dp">
+
+        <TextView
+            android:id="@+id/advertiserTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/jaldi"
+            android:includeFontPadding="false"
+            android:text="Hirdető: "
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/advertiser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/advertiserTitle"
+            android:layout_toStartOf="@+id/listBtn"
+            android:fontFamily="@font/jaldi"
+            android:includeFontPadding="false"/>
+
+        <TextView
+            android:id="@+id/datetimeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/advertiser"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/jaldi"
+            android:includeFontPadding="false"
+            android:text="Időpont: "
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/datetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/advertiser"
+            android:layout_toEndOf="@+id/datetimeTitle"
+            android:layout_toStartOf="@+id/listBtn"
+            android:fontFamily="@font/jaldi"
+            android:includeFontPadding="false" />
+
+
+        <TextView
+            android:id="@+id/phoneNumberTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/datetime"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/jaldi"
+            android:includeFontPadding="false"
+            android:text="Telefonszám: "
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/phoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/datetime"
+            android:layout_toEndOf="@+id/phoneNumberTitle"
+            android:layout_toStartOf="@+id/listBtn"
+            android:fontFamily="@font/jaldi"
+            android:includeFontPadding="false" />
+
+        <TextView
+            android:id="@+id/otherContactTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/phoneNumber"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/jaldi"
+            android:includeFontPadding="false"
+            android:text="Egyéb kapcsolat: "
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/otherContact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/phoneNumber"
+            android:layout_toEndOf="@+id/otherContactTitle"
+            android:layout_toStartOf="@+id/listBtn"
+            android:fontFamily="@font/jaldi"/>
+
+        <TextView
+            android:id="@+id/locationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/otherContact"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/jaldi"
+            android:includeFontPadding="false"
+            android:text="Helyszín: "
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/otherContact"
+            android:layout_toEndOf="@+id/locationTitle"
+            android:layout_toStartOf="@+id/listBtn"
+            android:fontFamily="@font/jaldi"
+            android:includeFontPadding="false" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/listBtn"
+            android:layout_width="50dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="false"
+            android:backgroundTint="#537658"
+            app:cornerRadius="150dp"
+            app:icon="@drawable/ic_reserveapp"
+            app:iconGravity="top"
+            app:iconSize="25dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/deleteBtn"
+            android:layout_width="50dp"
+            android:layout_height="45dp"
+            android:layout_below="@+id/listBtn"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="false"
+            android:backgroundTint="@color/md_theme_onErrorContainer"
+            app:cornerRadius="150dp"
+            app:icon="@drawable/ic_deleteapp"
+            app:iconGravity="top"
+            app:iconSize="25dp" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

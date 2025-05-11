@@ -1,5 +1,7 @@
 package com.example.nailappt;
 
+import androidx.annotation.NonNull;
+
 import java.util.Map;
 
 public class Appointment {
@@ -22,6 +24,20 @@ public class Appointment {
         this.phoneNum = phoneNum;
         this.otherContact = otherContact;
     }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", advertiserID='" + advertiserID + '\'' +
+                ", phoneNum='" + phoneNum + '\'' +
+                ", otherContact='" + otherContact + '\'' +
+                ", location='" + location + '\'' +
+                '}';
+    }
+
 
     public String getAdvertiserID() {
         return advertiserID;

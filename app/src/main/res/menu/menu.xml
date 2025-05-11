@@ -3,14 +3,13 @@
     <item
         android:id="@+id/advertise"
         android:icon="@drawable/ic_advert"
-        android:title="@string/advertise"
-        ></item>
+        android:title="@string/advertise"/>
     <item
         android:id="@+id/booking"
         android:icon="@drawable/ic_calendar"
-        android:title="Foglalás"></item>
+        android:title="@string/reservation"/>
     <item
         android:id="@+id/profile"
         android:icon="@drawable/ic_profile"
-        android:title="@string/profile"></item>
+        android:title="@string/profile"/>
 </menu>
