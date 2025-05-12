@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.Map;
 
 public class Appointment {
+    public String appointmentID;
     public String advertiserID;
     public String bookedByID;
     public String date;
@@ -29,16 +30,18 @@ public class Appointment {
     @Override
     public String toString() {
         return "Appointment{" +
-                "date='" + date + '\'' +
-                ", time='" + time + '\'' +
+                "appointmentID='" + appointmentID + '\'' +
                 ", advertiserID='" + advertiserID + '\'' +
+                ", bookedByID='" + bookedByID + '\'' +
+                ", date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", location=" + location +
                 ", phoneNum='" + phoneNum + '\'' +
                 ", otherContact='" + otherContact + '\'' +
-                ", location='" + location + '\'' +
                 '}';
     }
 
-
+    public String getAppointmentID(){return appointmentID.trim();}
     public String getAdvertiserID() {
         return advertiserID;
     }
@@ -66,6 +69,8 @@ public class Appointment {
     public String getOtherContact() {
         return otherContact;
     }
+
+    public void setAppointmentID(String appointmentID) { this.appointmentID = appointmentID;}
 
     public void setBookedByID(String bookedByID) {
         this.bookedByID = bookedByID;

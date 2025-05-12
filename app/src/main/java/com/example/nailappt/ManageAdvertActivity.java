@@ -2,11 +2,13 @@ package com.example.nailappt;
 
 import static java.lang.Integer.parseInt;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -16,6 +18,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,9 +28,11 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddAdvertActivity extends AppCompatActivity {
+public class ManageAdvertActivity extends AppCompatActivity {
     private static final String LOG_TAG = RegisterActivity.class.getName();
 
+    TextView screenTitle;
+    MaterialButton manageBtn;
     TextInputEditText dateET;
     TextInputEditText timeET;
     TextInputEditText postCodeET;
@@ -43,6 +48,7 @@ public class AddAdvertActivity extends AppCompatActivity {
     TextInputLayout phoneETLO;
     TextInputLayout otherContactETLO;
     FirebaseUser currentUser;
+    private Appointment currentAppointment = null;
 
     private final UserRepository userRepo = new UserRepository();
     private final AppointmentRepository appointmentRepo = new AppointmentRepository();
@@ -53,14 +59,24 @@ public class AddAdvertActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_add_advert);
+        setContentView(R.layout.activity_manage_advert);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        Intent intent = getIntent();
+        if( intent.hasExtra("appointmentID")){
+            String appointmentID = intent.getStringExtra("appointmentID");
+
+            loadAppointment(appointmentID);
+        }
+
         currentUser = mAuth.getCurrentUser();
+
+        screenTitle = findViewById(R.id.titleTextView);
+        manageBtn = findViewById(R.id.manageButton);
 
         dateET = findViewById(R.id.editTextDate);
         timeET = findViewById(R.id.editTextTime);
@@ -320,6 +336,7 @@ public class AddAdvertActivity extends AppCompatActivity {
                     if (appointmentCreation.isSuccessful()) {
                         Log.i(LOG_TAG, "Időpont létrehozása sikeres!");
                         Toast successToast = Toast.makeText(this, "Sikeres létrehozás!", Toast.LENGTH_SHORT);
+
                         successToast.show();
                         finish();
                     } else {
@@ -335,6 +352,55 @@ public class AddAdvertActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void loadAppointment(String appointmentID){
+        appointmentRepo.getAppointmentByID(appointmentID).addOnCompleteListener( task -> {
+            if(task.isSuccessful() && task.getResult() != null){
+                currentAppointment = task.getResult().toObject(Appointment.class);
+
+                if(currentAppointment != null){
+                    dateET.setText(currentAppointment.getDate());
+                    timeET.setText(currentAppointment.getTime());
+                    Map<String,String> location = currentAppointment.getLocation();
+                    postCodeET.setText(location.get("postcode"));
+                    cityET.setText(location.get("city"));
+                    addressET.setText(location.get("address"));
+                    phoneET.setText(currentAppointment.getPhoneNum());
+                    otherContactET.setText(currentAppointment.getOtherContact());
+                    screenTitle.setText("Időpont módosítása");
+                    manageBtn.setText("Frissítés");
+                    manageBtn.setOnClickListener( v -> {updateAppointment();});
+                }
+            }
+        });
+    }
+
+    private void updateAppointment(){
+        if (currentAppointment != null){
+            currentAppointment.setDate(dateET.getText().toString());
+            currentAppointment.setTime(timeET.getText().toString());
+            Map<String, String> location  = new HashMap<>() {{
+                put("postcode",postCodeET.getText().toString());
+                put("city", cityET.getText().toString());
+                put("address", addressET.getText().toString());
+            }};
+            currentAppointment.setLocation(location);
+            currentAppointment.setPhoneNum(phoneET.getText().toString());
+            currentAppointment.setOtherContact(otherContactET.getText().toString());
+
+            appointmentRepo.updateAppointment(currentAppointment).addOnCompleteListener(task -> {
+               if(task.isSuccessful()){
+                   Log.i(LOG_TAG, "Időpont frissítése sikeres!");
+                   Toast successToast = Toast.makeText(this, "Sikeres frissítés!", Toast.LENGTH_SHORT);
+
+                   successToast.show();
+                   finish();
+               } else {
+                   Log.e(LOG_TAG, "Időpont frissíése sikertelen!");
+               }
+            });
+        }
     }
 
 

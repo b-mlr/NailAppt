@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_margin="10dp"
+    app:cardCornerRadius="35dp"
+    app:cardElevation="10dp"
+    app:cardPreventCornerOverlap="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_margin="5dp">
+        android:layout_margin="15dp"
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/advertiserTitle"
@@ -25,10 +29,10 @@
             android:id="@+id/advertiser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/advertiserTitle"
             android:layout_toStartOf="@+id/listBtn"
+            android:layout_toEndOf="@+id/advertiserTitle"
             android:fontFamily="@font/jaldi"
-            android:includeFontPadding="false"/>
+            android:includeFontPadding="false" />
 
         <TextView
             android:id="@+id/datetimeTitle"
@@ -47,8 +51,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/advertiser"
-            android:layout_toEndOf="@+id/datetimeTitle"
             android:layout_toStartOf="@+id/listBtn"
+            android:layout_toEndOf="@+id/datetimeTitle"
+            android:fontFamily="@font/jaldi"
+            android:includeFontPadding="false" />
+
+        <TextView
+            android:id="@+id/locationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/datetime"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/jaldi"
+            android:includeFontPadding="false"
+            android:text="Helyszín: "
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/datetime"
+            android:layout_toStartOf="@+id/listBtn"
+            android:layout_toEndOf="@+id/locationTitle"
             android:fontFamily="@font/jaldi"
             android:includeFontPadding="false" />
 
@@ -57,7 +83,7 @@
             android:id="@+id/phoneNumberTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/datetime"
+            android:layout_below="@+id/location"
             android:layout_alignParentStart="true"
             android:fontFamily="@font/jaldi"
             android:includeFontPadding="false"
@@ -69,9 +95,9 @@
             android:id="@+id/phoneNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/datetime"
-            android:layout_toEndOf="@+id/phoneNumberTitle"
+            android:layout_below="@+id/location"
             android:layout_toStartOf="@+id/listBtn"
+            android:layout_toEndOf="@+id/phoneNumberTitle"
             android:fontFamily="@font/jaldi"
             android:includeFontPadding="false" />
 
@@ -92,29 +118,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/phoneNumber"
-            android:layout_toEndOf="@+id/otherContactTitle"
             android:layout_toStartOf="@+id/listBtn"
-            android:fontFamily="@font/jaldi"/>
+            android:layout_toEndOf="@+id/otherContactTitle"
+            android:fontFamily="@font/jaldi" />
+
 
         <TextView
-            android:id="@+id/locationTitle"
+            android:id="@+id/bookedTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/otherContact"
             android:layout_alignParentStart="true"
             android:fontFamily="@font/jaldi"
             android:includeFontPadding="false"
-            android:text="Helyszín: "
+            android:text="@string/bookedBy"
             android:textColor="@color/md_theme_onPrimaryContainer"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/location"
+            android:id="@+id/bookedby"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/otherContact"
-            android:layout_toEndOf="@+id/locationTitle"
             android:layout_toStartOf="@+id/listBtn"
+            android:layout_toEndOf="@+id/bookedTitle"
             android:fontFamily="@font/jaldi"
             android:includeFontPadding="false" />
 
@@ -123,7 +150,7 @@
             android:layout_width="50dp"
             android:layout_height="45dp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="false"
+
             android:backgroundTint="#537658"
             app:cornerRadius="150dp"
             app:icon="@drawable/ic_reserveapp"

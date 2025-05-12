@@ -16,7 +16,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firestore.v1.Document;
 
 import java.util.ArrayList;
 
@@ -93,11 +92,12 @@ public class AdvertiseFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_advertise, container, false);
 
-        MaterialButton button = view.findViewById(R.id.addAd);
-        button.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), AddAdvertActivity.class);
+        MaterialButton addBtn = view.findViewById(R.id.addAd);
+        addBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ManageAdvertActivity.class);
             startActivity(intent);
         });
+
 
         mAdapter = new AppointmentAdapter(requireContext(), mAppointmentList);
 
@@ -106,7 +106,7 @@ public class AdvertiseFragment extends Fragment {
         adRW.setAdapter(mAdapter);
 
 
-        Log.d(LOG_TAG, "Appointments list size: " + mAppointmentList.size());
+        Log.d(LOG_TAG, "Appointments list size: " + mAppointmentList.size() +"\n GetItemCount:" + mAdapter.getItemCount());
 
 
 
@@ -122,6 +122,7 @@ public class AdvertiseFragment extends Fragment {
 
                     for (DocumentSnapshot document : querySnapshot){
                         Appointment appointment = document.toObject(Appointment.class);
+                        Log.i(LOG_TAG,appointment.toString());
                         mAppointmentList.add(appointment);
                     }
                     mAdapter.notifyDataSetChanged();
@@ -134,4 +135,5 @@ public class AdvertiseFragment extends Fragment {
         mAppointmentList.clear();
         super.onDestroy();
     }
+
 }

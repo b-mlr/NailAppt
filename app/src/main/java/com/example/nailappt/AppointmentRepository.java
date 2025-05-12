@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -13,11 +14,26 @@ public class AppointmentRepository {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference appointmentsRef = db.collection("Appointments");
 
-    public Task<DocumentReference> createAppointment(Appointment newAppointment){
-        return appointmentsRef.add(newAppointment);
+    public Task<Void> createAppointment(Appointment newAppointment){
+        DocumentReference docRef = appointmentsRef.document(); // generál automatikus ID-t
+        newAppointment.setAppointmentID(docRef.getId()); // ID mentése mezőként is
+        return docRef.set(newAppointment);
+    }
+
+    public Task<Void> updateAppointment(Appointment appointment ){
+        return appointmentsRef.document(appointment.getAppointmentID()).set(appointment);
+    }
+
+    public Task<DocumentSnapshot> getAppointmentByID(String appointmentID){
+        return appointmentsRef.document(appointmentID).get();
     }
 
     public Task<QuerySnapshot> getPostedAppointments(String uid){
         return appointmentsRef.whereEqualTo("advertiserID", uid).orderBy("date", Query.Direction.ASCENDING).get();
     }
+
+    public Task<Void> deleteAppointment(String appointmentID){
+        return appointmentsRef.document(appointmentID).delete();
+    }
+
 }

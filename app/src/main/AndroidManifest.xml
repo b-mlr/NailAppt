@@ -16,7 +16,7 @@
         android:theme="@style/Base.Theme.NailAppt"
         tools:targetApi="31">
         <activity
-            android:name=".AddAdvertActivity"
+            android:name=".ManageAdvertActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity

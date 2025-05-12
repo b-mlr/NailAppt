@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddAdvertActivity">
+    tools:context=".ManageAdvertActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -44,7 +44,7 @@
                 app:srcCompat="@drawable/ic_back_arrow" />
 
             <TextView
-                android:id="@+id/RegTextView"
+                android:id="@+id/titleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/newadvert"
@@ -228,7 +228,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/addButton"
+            android:id="@+id/manageButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
