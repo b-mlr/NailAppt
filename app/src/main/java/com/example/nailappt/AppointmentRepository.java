@@ -10,6 +10,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.List;
+
 public class AppointmentRepository {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference appointmentsRef = db.collection("Appointments");
@@ -34,6 +36,10 @@ public class AppointmentRepository {
 
     public Task<Void> deleteAppointment(String appointmentID){
         return appointmentsRef.document(appointmentID).delete();
+    }
+
+    public Task<QuerySnapshot> freeAppointmentsByDate(String selectedDate, String uid){
+        return appointmentsRef.whereEqualTo("date",selectedDate).whereNotEqualTo("advertiserID",uid).get();
     }
 
 }

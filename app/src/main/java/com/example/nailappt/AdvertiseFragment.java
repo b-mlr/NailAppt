@@ -89,7 +89,6 @@ public class AdvertiseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_advertise, container, false);
 
         MaterialButton addBtn = view.findViewById(R.id.addAd);
@@ -107,8 +106,6 @@ public class AdvertiseFragment extends Fragment {
 
 
         Log.d(LOG_TAG, "Appointments list size: " + mAppointmentList.size() +"\n GetItemCount:" + mAdapter.getItemCount());
-
-
 
         return view;
     }

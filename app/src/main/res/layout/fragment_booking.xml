@@ -8,8 +8,10 @@
     android:orientation="vertical">
 
     <CalendarView
+        android:id="@+id/calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,8 +20,9 @@
     </CalendarView>
 
     <TextView
+        android:id="@+id/freeAppTitle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/jaldi"
         android:text="@string/freeappointments"
         android:textAlignment="center"
@@ -28,12 +31,13 @@
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/adRecycler"
+        android:id="@+id/bookingRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginBottom="70dp"
         tools:listitem="@android:layout/activity_list_item"
-        android:paddingBottom="100dp">
+        >
 
     </androidx.recyclerview.widget.RecyclerView>
 
