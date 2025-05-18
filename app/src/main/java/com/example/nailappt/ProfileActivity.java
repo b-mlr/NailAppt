@@ -1,8 +1,12 @@
 package com.example.nailappt;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CalendarContract;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,24 +15,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileActivity extends AppCompatActivity implements AppointmentAdapter.OnBookListener {
+public class ProfileActivity extends AppCompatActivity implements AppointmentAdapter.OnBookListener, AppointmentAdapter.OnCallListener {
 
     TextView titleTV;
     TextView myDataTV;
@@ -71,6 +77,8 @@ public class ProfileActivity extends AppCompatActivity implements AppointmentAda
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser =  mAuth.getCurrentUser();
     private static final String LOG_TAG = AdvertiseFragment.class.getName();
+    private static final int REQUEST_CALL_PERMISSION = 1;
+    private String pendingPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,60 +122,23 @@ public class ProfileActivity extends AppCompatActivity implements AppointmentAda
         saveBtn = findViewById(R.id.saveBtn);
         cancelBtn = findViewById(R.id.cancelBtn);
 
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetProfileView();
+            }
+        });
 
-        mAdapter = new AppointmentAdapter(this, myAppointmentList, "profileActivity", this);
+
+        mAdapter = new AppointmentAdapter(this, myAppointmentList, "profileActivity", this, this);
 
         appointmentRW = findViewById(R.id.myAppointmentsRecycler);
         appointmentRW.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         appointmentRW.setAdapter(mAdapter);
 
-        userRepo.getUserbyID(currentUser.getUid()).addOnSuccessListener( userData -> {
-            if(userData != null) {
-                if (userData.get("lastName") != null) {
-                    nameTV.append(" " + userData.get("lastName").toString() + " ");
-                }
-
-                if (userData.get("firstName") != null) {
-                    nameTV.append(userData.get("firstName").toString());
-                }
-
-                Map<String, Object> location = (Map<String, Object>) userData.get("location");
-
-                if (location != null) {
-                    if (location.get("postcode") != null) {
-                        locationTV.append(" " +location.get("postcode").toString() + ", ");
-                    }
-                    if (location.get("city") != null) {
-                        Log.i(LOG_TAG, location.get("city").toString());
-                        locationTV.append(location.get("city").toString() + " ");
-                    }
-                    if (location.get("address") != null) {
-                        Log.i(LOG_TAG, location.get("address").toString());
-                        locationTV.append(location.get("address").toString());
-                    }
-                }
-            }
-
-            if(userData.get("phone") != null){
-                Log.i(LOG_TAG,userData.get("phone").toString());
-                phoneTV.setText(userData.get("phone").toString());
-            } else {
-                phoneTitleTV.setVisibility(View.GONE);
-                phoneTV.setVisibility(View.GONE);
-            }
-
-            if(userData.get("otherContact") != null){
-                Log.i(LOG_TAG,userData.get("otherContact").toString());
-                otherContactTV.setText(userData.get("otherContact").toString());
-            } else {
-                otherContactTitleTV.setVisibility(View.GONE);
-                otherContactTV.setVisibility(View.GONE);
-            }
-
-        });
-
         if( currentUser != null) {
             Log.d(LOG_TAG,"Belépett felhasználó");
+            loadUserData();
         } else {
             Log.d(LOG_TAG,"Nem belépett felhasználó");
         }
@@ -177,6 +148,98 @@ public class ProfileActivity extends AppCompatActivity implements AppointmentAda
         }
 
         fillMyAppointmentsList();
+
+        lastNameET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                lastNameETLO.setError("");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(lastNameET.getText().toString().trim().isEmpty()){
+                    lastNameETLO.setError("A mező kitöltése kötelező!");
+                }
+            }
+        });
+
+        firstNameET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                firstNameETLO.setError("");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(firstNameET.getText().toString().trim().isEmpty()){
+                    firstNameETLO.setError("A mező kitöltése kötelező!");
+                }
+            }
+        });
+
+        postCodeET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                postCodeETLO.setError("");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(postCodeET.getText().toString().trim().isEmpty()){
+                    postCodeETLO.setError("A mező kitöltése kötelező!");
+                }
+            }
+        });
+
+        cityET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                cityETLO.setError("");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(cityET.getText().toString().trim().isEmpty()){
+                    cityETLO.setError("A mező kitöltése kötelező!");
+                }
+            }
+        });
+
+        addressET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                addressETLO.setError("");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(addressET.getText().toString().trim().isEmpty()){
+                    addressETLO.setError("A mező kitöltése kötelező!");
+                }
+            }
+        });
+
+
     }
 
 
@@ -193,6 +256,56 @@ public class ProfileActivity extends AppCompatActivity implements AppointmentAda
         startActivity(intent);
 
         finish();
+    }
+
+    public void loadUserData(){
+        userRepo.getUserbyID(currentUser.getUid()).addOnSuccessListener( userData -> {
+            if(userData != null) {
+                if (userData.get("lastName") != null) {
+                    nameTV.setText(" " + userData.get("lastName").toString() + " ");
+                }
+
+                if (userData.get("firstName") != null) {
+                    nameTV.append(userData.get("firstName").toString());
+                }
+
+                Map<String, Object> location = (Map<String, Object>) userData.get("location");
+
+                if (location != null) {
+                    if (location.get("postcode") != null) {
+                        locationTV.setText(" " +location.get("postcode").toString() + ", ");
+                    }
+                    if (location.get("city") != null) {
+                        Log.i(LOG_TAG, location.get("city").toString());
+                        locationTV.append(location.get("city").toString() + " ");
+                    }
+                    if (location.get("address") != null) {
+                        Log.i(LOG_TAG, location.get("address").toString());
+                        locationTV.append(location.get("address").toString());
+                    }
+                }
+
+                if(userData.get("phone") != null && !userData.get("phone").toString().isEmpty()){
+                    Log.i(LOG_TAG,userData.get("phone").toString());
+                    phoneTitleTV.setVisibility(View.VISIBLE);
+                    phoneTV.setVisibility(View.VISIBLE);
+                    phoneTV.setText(userData.get("phone").toString());
+                } else {
+                    phoneTitleTV.setVisibility(View.GONE);
+                    phoneTV.setVisibility(View.GONE);
+                }
+
+                if(userData.get("otherContact") != null && !userData.get("otherContact").toString().isEmpty()){
+                    Log.i(LOG_TAG,userData.get("otherContact").toString());
+                    otherContactTitleTV.setVisibility(View.VISIBLE);
+                    otherContactTV.setVisibility(View.VISIBLE);
+                    otherContactTV.setText(userData.get("otherContact").toString());
+                } else {
+                    otherContactTitleTV.setVisibility(View.GONE);
+                    otherContactTV.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     public void fillMyAppointmentsList(){
@@ -216,7 +329,9 @@ public class ProfileActivity extends AppCompatActivity implements AppointmentAda
 
     }
 
-    public void cancelEditing(View view) {
+    public void resetProfileView() {
+        loadUserData();
+
         lastNameETLO.setVisibility(View.GONE);
         lastNameET.setVisibility(View.GONE);
         firstNameETLO.setVisibility(View.GONE);
@@ -242,10 +357,6 @@ public class ProfileActivity extends AppCompatActivity implements AppointmentAda
         nameTV.setVisibility(View.VISIBLE);
         locationTitleTV.setVisibility(View.VISIBLE);
         locationTV.setVisibility(View.VISIBLE);
-        phoneTitleTV.setVisibility(View.VISIBLE);
-        phoneTV.setVisibility(View.VISIBLE);
-        otherContactTitleTV.setVisibility(View.VISIBLE);
-        otherContactTV.setVisibility(View.VISIBLE);
         editBtn.setVisibility(View.VISIBLE);
         logoutBtn.setVisibility(View.VISIBLE);
     }
@@ -283,5 +394,135 @@ public class ProfileActivity extends AppCompatActivity implements AppointmentAda
         saveBtn.setVisibility(View.VISIBLE);
         cancelBtn.setVisibility(View.VISIBLE);
 
+        userRepo.getUserbyID(currentUser.getUid()).addOnSuccessListener( userData -> {
+            if(userData != null) {
+                if (userData.get("lastName") != null) {
+                    lastNameET.setText(userData.get("lastName").toString());
+                }
+
+                if (userData.get("firstName") != null) {
+                    firstNameET.setText(userData.get("firstName").toString());
+                }
+
+                Map<String, Object> location = (Map<String, Object>) userData.get("location");
+
+                if (location != null) {
+                    if (location.get("postcode") != null) {
+                        postCodeET.setText(location.get("postcode").toString());
+                    }
+                    if (location.get("city") != null) {
+                        cityET.setText(location.get("city").toString());
+                    }
+                    if (location.get("address") != null) {
+                        addressET.setText(location.get("address").toString());
+                    }
+                }
+
+                if(userData.get("phone") != null){
+                    phoneET.setText(userData.get("phone").toString());
+
+                }
+
+                if(userData.get("otherContact") != null){
+                    otherContactET.setText(userData.get("otherContact").toString());
+                }
+            }
+
+        });
+    }
+
+
+    public void saveProfileChanges(View view) {
+        if(postCodeET.getText().toString().trim().isEmpty()){
+            postCodeETLO.setError("A mező kitöltése kötelező!");
+        }
+        if(cityET.getText().toString().trim().isEmpty()){
+            cityETLO.setError("A mező kitöltése kötelező!");
+        }
+        if(addressET.getText().toString().trim().isEmpty()){
+            addressETLO.setError("A mező kitöltése kötelező!");
+        }
+        if(((lastNameETLO.getError() == null || lastNameETLO.getError().toString().isEmpty()) &&
+                (firstNameETLO.getError() == null || firstNameETLO.getError().toString().isEmpty()) &&
+                (postCodeETLO.getError() == null || postCodeETLO.getError().toString().isEmpty())) &&
+                (cityETLO.getError() == null || cityETLO.getError().toString().isEmpty()) &&
+                (addressETLO.getError() == null || addressETLO.getError().toString().isEmpty()))  {
+            String postCode = postCodeET.getText().toString();
+            String city = cityET.getText().toString();
+            String address = addressET.getText().toString();
+            Map<String, String> location = new HashMap<String, String>(){{
+                put("postcode",postCode);
+                put("city",city);
+                put("address",address);
+            }};
+
+            User updatedUser = new User(
+                    currentUser.getUid(),
+                    currentUser.getEmail(),
+                    firstNameET.getText().toString(),
+                    lastNameET.getText().toString(),
+                    location,
+                    phoneET.getText().toString().equals("") ? "" : phoneET.getText().toString(),
+                    otherContactET.getText().toString().equals("") ? "" : otherContactET.getText().toString()
+            );
+
+            Log.i(LOG_TAG,updatedUser.toString());
+
+            userRepo.updateUser(updatedUser).addOnCompleteListener( task -> {
+                if(task.isSuccessful()){
+                    Toast successToast = Toast.makeText(this,"Sikeres frissítés!",Toast.LENGTH_SHORT);
+                    successToast.show();
+
+                    resetProfileView();
+                    loadUserData();
+                } else {
+                    Toast failToast = Toast.makeText(this,"Sikertelen frissítés!",Toast.LENGTH_SHORT);
+                    failToast.show();
+                }
+            });
+        }
+
+    }
+
+    private void makePhoneCall(String phoneNumber){
+        this.pendingPhoneNumber = phoneNumber;
+        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE},REQUEST_CALL_PERMISSION);
+        } else {
+            startCallIntent(phoneNumber);
+        }
+    }
+
+    private void startCallIntent(String phoneNumber){
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + phoneNumber));
+        startActivity(callIntent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CALL_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startCallIntent(pendingPhoneNumber);
+            } else {
+                Toast.makeText(this, "Telefonhívás indításához engedély szükséges", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onCallButtonClicked(String phoneNumber) {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Hívás indítása")
+                .setMessage("Biztosan fel szeretné venni a kapcsolatot az időpont meghirdetőjével?")
+                .setNegativeButton("Mégse", ((dialog, which) -> {
+                    dialog.dismiss();
+                }))
+                .setPositiveButton("Hívás", ((dialog, which) -> {
+                    makePhoneCall(phoneNumber);
+                }))
+                .show();
     }
 }

@@ -14,18 +14,17 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bottom_nav);  // Az alap layout, amiben a BottomNavigationView és a Fragment container található
+        setContentView(R.layout.bottom_nav);
 
         setupBottomNavigation();
 
         if (savedInstanceState == null) {
-            loadFragment(new BookingFragment()); // <- ez az alapértelmezett fragment
+            loadFragment(new BookingFragment());
             BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
             bottomNavigationView.setSelectedItemId(R.id.booking);
         }
     }
 
-    // A BottomNavigationView beállítása
     protected void setupBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
 
@@ -44,7 +43,7 @@ public class BaseActivity extends AppCompatActivity {
             }
 
             if (selectedFragment != null) {
-                loadFragment(selectedFragment);  // Frissíti a fragmentet
+                loadFragment(selectedFragment);
                 return true;
             }
 
@@ -52,11 +51,10 @@ public class BaseActivity extends AppCompatActivity {
         });
     }
 
-    // Fragment betöltése
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null); // Ez lehetővé teszi a visszalépést a navigációs történetben
+        transaction.addToBackStack(null);
         transaction.commit();
     }
 }

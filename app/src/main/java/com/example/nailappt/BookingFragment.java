@@ -1,14 +1,12 @@
 package com.example.nailappt;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.Manifest;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -35,14 +33,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.TimeZone;
 
 /**
@@ -50,14 +44,12 @@ import java.util.TimeZone;
  * Use the {@link BookingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BookingFragment extends Fragment implements AppointmentAdapter.OnBookListener{
+public class BookingFragment extends Fragment implements AppointmentAdapter.OnBookListener, AppointmentAdapter.OnCallListener{
     private static final String LOG_TAG = AdvertiseFragment.class.getName();
     private static final int REQUEST_CALENDAR_PERMISSION = 100;
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
     private final FirebaseUser currentUser =  mAuth.getCurrentUser();
     private final AppointmentRepository appointmentRepo = new AppointmentRepository();
-
     private RecyclerView adRW;
     private ArrayList<Appointment> mAppointmentList = new ArrayList<>();
     private HashSet<CalendarDay> daysWithAppointments = new HashSet<>();
@@ -65,6 +57,7 @@ public class BookingFragment extends Fragment implements AppointmentAdapter.OnBo
     private MaterialCalendarView calendarView;
     private String selectedDate;
     private Appointment pendingAppointment;
+
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -124,7 +117,7 @@ public class BookingFragment extends Fragment implements AppointmentAdapter.OnBo
 
         View view = inflater.inflate(R.layout.fragment_booking, container, false);
 
-        mAdapter = new AppointmentAdapter(requireContext(), mAppointmentList, "bookingFragment", this);
+        mAdapter = new AppointmentAdapter(requireContext(), mAppointmentList, "bookingFragment", this, this);
 
         adRW = view.findViewById(R.id.bookingRecycler);
         adRW.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
@@ -132,7 +125,7 @@ public class BookingFragment extends Fragment implements AppointmentAdapter.OnBo
 
         calendarView = view.findViewById(R.id.calendarView);
 
-        calendarView.state().edit().setMinimumDate(CalendarDay.today().getDate());
+        calendarView.state().edit().setMinimumDate(CalendarDay.today().getDate()).commit();
         Log.i(LOG_TAG,CalendarDay.today().getDate().toString());
 
         fillDaysWithAppointments();
@@ -140,6 +133,7 @@ public class BookingFragment extends Fragment implements AppointmentAdapter.OnBo
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+
                 selectedDate = calendarDayToString(date);
                 Log.i(LOG_TAG, "Formatted date: " + selectedDate);
 
@@ -251,14 +245,12 @@ public class BookingFragment extends Fragment implements AppointmentAdapter.OnBo
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CALENDAR_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission megadva - itt indítsd el a calendar hozzáadást
                 try {
                     addEventToCalendar(pendingAppointment);
                 } catch (UnsupportedEncodingException e) {
                     throw new RuntimeException(e);
                 }
             } else {
-                // Permission megtagadva - jelezd a usernek, vagy kezeld le
                 Toast.makeText(requireContext(), "Naptár írási engedély szükséges a foglaláshoz", Toast.LENGTH_SHORT).show();
             }
         }
@@ -266,19 +258,17 @@ public class BookingFragment extends Fragment implements AppointmentAdapter.OnBo
 
     private void addEventToCalendar(Appointment appointment) throws UnsupportedEncodingException {
         Calendar beginTime = Calendar.getInstance();
-        // Feltételezem, hogy az Appointment tartalmazza a dátumot és időpontot
-        // Itt például parse-oljuk a dátumot és az időt, és beállítjuk beginTime-ot
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
             beginTime.setTime(sdf.parse(appointment.getDate() + " " + appointment.getTime()));
         } catch (ParseException e) {
             e.printStackTrace();
-            beginTime = Calendar.getInstance(); // fallback most
+            beginTime = Calendar.getInstance();
         }
 
         long startMillis = beginTime.getTimeInMillis();
-        long endMillis = startMillis + 60 * 60 * 1000; // 1 óra hosszú esemény például
+        long endMillis = startMillis + 60 * 60 * 1000;
 
         Log.i(LOG_TAG,startMillis + " " + endMillis);
 
@@ -326,6 +316,11 @@ public class BookingFragment extends Fragment implements AppointmentAdapter.OnBo
                         Toast successToast = Toast.makeText(requireContext(), "Sikeres foglalás!", Toast.LENGTH_SHORT);
                         successToast.show();
 
+                        mAdapter.removeAppointment(currentAppointment);
+                        daysWithAppointments.clear();
+                        fillDaysWithAppointments();
+
+
                         this.pendingAppointment = currentAppointment;
                         try {
                             requestCalendarPermission();
@@ -340,6 +335,12 @@ public class BookingFragment extends Fragment implements AppointmentAdapter.OnBo
                 }))
                 .show();
     }
+
+    @Override
+    public void onCallButtonClicked(String phoneNumber) {
+
+    }
+
 
     public void onStart() {
         super.onStart();
@@ -357,4 +358,5 @@ public class BookingFragment extends Fragment implements AppointmentAdapter.OnBo
         daysWithAppointments.clear();
         fillDaysWithAppointments();
     }
+
 }

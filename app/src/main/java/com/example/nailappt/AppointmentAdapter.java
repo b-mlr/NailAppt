@@ -31,16 +31,23 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         void onBookRequested(Appointment appointment);
     }
     private final OnBookListener bookListener;
+
+    public interface OnCallListener {
+        void onCallButtonClicked(String phoneNumber);
+    }
+
+    private final OnCallListener callListener;
     private final UserRepository userRepo = new UserRepository();
     private final AppointmentRepository appointmentRepo = new AppointmentRepository();
     private static final String LOG_TAG = AdvertiseFragment.class.getName();
 
 
-    AppointmentAdapter(Context context, ArrayList<Appointment> appointmentsData, String mode, OnBookListener listener){
+    AppointmentAdapter(Context context, ArrayList<Appointment> appointmentsData, String mode, OnBookListener bookListener, OnCallListener callListener){
         this.mAppointmentsData = (appointmentsData != null) ? appointmentsData : new ArrayList<>();
         this.mContext = context;
         this.mode = mode;
-        this.bookListener = listener;
+        this.bookListener = bookListener;
+        this.callListener = callListener;
     }
 
     @Override
@@ -68,10 +75,17 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
                                 Toast successToast = Toast.makeText(holder.itemView.getContext(), "Sikeres törlés!", Toast.LENGTH_SHORT);
                                 successToast.show();
 
-                                if (position != RecyclerView.NO_POSITION) {
-                                    mAppointmentsData.remove(position);
-                                    notifyItemRemoved(position);
-                                }
+                                holder.itemView.animate()
+                                        .alpha(0f)
+                                        .setDuration(300)
+                                        .withEndAction(() -> {
+                                            int pos = holder.getAdapterPosition();
+                                            if (pos != RecyclerView.NO_POSITION) {
+                                                mAppointmentsData.remove(pos);
+                                                notifyItemRemoved(pos);
+                                            }
+                                        })
+                                        .start();
 
                             }).addOnFailureListener(e -> {
                                 Log.e(LOG_TAG, "Törlés hiba: " + e.getMessage());
@@ -101,10 +115,17 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
                                 Toast successToast = Toast.makeText(holder.itemView.getContext(), "Sikeres lemondás!", Toast.LENGTH_SHORT);
                                 successToast.show();
 
-                                if (position != RecyclerView.NO_POSITION) {
-                                    mAppointmentsData.remove(position);
-                                    notifyItemRemoved(position);
-                                }
+                                holder.itemView.animate()
+                                        .alpha(0f)
+                                        .setDuration(300)
+                                        .withEndAction(() -> {
+                                            int pos = holder.getAdapterPosition();
+                                            if (pos != RecyclerView.NO_POSITION) {
+                                                mAppointmentsData.remove(pos);
+                                                notifyItemRemoved(pos);
+                                            }
+                                        })
+                                        .start();
 
                             }).addOnFailureListener(e -> {
                                 Log.e(LOG_TAG, "Törlés hiba: " + e.getMessage());
@@ -112,6 +133,18 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
                             });
                         }))
                         .show();
+            });
+
+            holder.mListBtn.setOnClickListener(v -> {
+                if ( callListener != null){
+                    String phoneNumber = currentAppointment.getPhoneNum().toString();
+                    if(!phoneNumber.isEmpty() && !phoneNumber.equals("null")) {
+                        callListener.onCallButtonClicked(currentAppointment.getPhoneNum());
+                    } else {
+                        Toast failToast = Toast.makeText(holder.itemView.getContext(), "Nincs hívható telefonszám!", Toast.LENGTH_SHORT);
+                        failToast.show();
+                    };
+                }
             });
         } else if ("bookingFragment".equals(mode)){
             holder.mListBtn.setOnClickListener( v -> {
@@ -125,6 +158,14 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
     @Override
     public int getItemCount() {
         return (mAppointmentsData != null) ? mAppointmentsData.size() : 0;
+    }
+
+    public void removeAppointment(Appointment appointment) {
+        int position = mAppointmentsData.indexOf(appointment);
+        if (position != -1) {
+            mAppointmentsData.remove(position);
+            notifyItemRemoved(position);
+        }
     }
 
     public String formatLocation(Map<String,String> location){
@@ -164,24 +205,31 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
             } else if("bookingFragment".equals(mode)){
                 mDeleteBtn.setVisibility(View.GONE);
             } else if("profileActivity".equals(mode)){
-                mListBtn.setVisibility(View.GONE);
+                mListBtn.setIcon(ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_call));
             }
 
 
         }
 
         public void bindTo(Appointment currentItem){
-            String datetime = currentItem.getDate() + " " + currentItem.getTime() + " - ";
+            String datetime = currentItem.getDate() + " " + currentItem.getTime();
             mDateTime.setText(datetime);
 
             userRepo.getUserbyID(currentItem.getAdvertiserID()).addOnCompleteListener( task -> {
                if(task.isSuccessful()){
                    Map<String, Object> userData = task.getResult();
+                   String firstName = "";
+                   String lastName = "";
 
-                   String firstName = userData.get("firstName").toString();
-                   String lastName = userData.get("lastName").toString();
+                   if(userData.get("firstName") != null) {
+                       firstName = userData.get("firstName").toString();
+                   }
+                   if(userData.get("lastName") != null) {
+                       lastName = userData.get("lastName").toString();
+                   }
                    String fullName = (!lastName.isEmpty() ? lastName : "") + " " + (!firstName.isEmpty() ? firstName : "" );
-                   mAdvertiser.setText(fullName);
+
+                   mAdvertiser.setText(" " + fullName);
                }
             });
 
@@ -204,11 +252,18 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
                 userRepo.getUserbyID(currentItem.getBookedByID()).addOnCompleteListener( task -> {
                     if(task.isSuccessful()){
                         Map<String, Object> userData = task.getResult();
+                        String firstName = "";
+                        String lastName = "";
 
-                        String firstName = userData.get("firstName").toString();
-                        String lastName = userData.get("lastName").toString();
+                        if(userData.get("firstName") != null) {
+                            firstName = userData.get("firstName").toString();
+                        }
+                        if(userData.get("lastName") != null) {
+                            lastName = userData.get("lastName").toString();
+                        }
                         String fullName = (!lastName.isEmpty() ? lastName : "") + " " + (!firstName.isEmpty() ? firstName : "" );
-                        mBookedBy.setText(fullName);
+
+                        mBookedBy.setText(" " + fullName);
                     }
                 });
             }

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
+    app:cardBackgroundColor="@color/md_theme_onPrimary"
     app:cardCornerRadius="35dp"
     app:cardElevation="10dp"
     app:cardPreventCornerOverlap="true">
@@ -32,7 +33,8 @@
             android:layout_toStartOf="@+id/listBtn"
             android:layout_toEndOf="@+id/advertiserTitle"
             android:fontFamily="@font/jaldi"
-            android:includeFontPadding="false" />
+            android:includeFontPadding="false"
+            android:textColor="@color/md_theme_onSurface_highContrast" />
 
         <TextView
             android:id="@+id/datetimeTitle"
@@ -54,7 +56,8 @@
             android:layout_toStartOf="@+id/listBtn"
             android:layout_toEndOf="@+id/datetimeTitle"
             android:fontFamily="@font/jaldi"
-            android:includeFontPadding="false" />
+            android:includeFontPadding="false"
+            android:textColor="@color/md_theme_onSurface_highContrast" />
 
         <TextView
             android:id="@+id/locationTitle"
@@ -76,7 +79,8 @@
             android:layout_toStartOf="@+id/listBtn"
             android:layout_toEndOf="@+id/locationTitle"
             android:fontFamily="@font/jaldi"
-            android:includeFontPadding="false" />
+            android:includeFontPadding="false"
+            android:textColor="@color/md_theme_onSurface_highContrast" />
 
 
         <TextView
@@ -99,7 +103,8 @@
             android:layout_toStartOf="@+id/listBtn"
             android:layout_toEndOf="@+id/phoneNumberTitle"
             android:fontFamily="@font/jaldi"
-            android:includeFontPadding="false" />
+            android:includeFontPadding="false"
+            android:textColor="@color/md_theme_onSurface_highContrast" />
 
         <TextView
             android:id="@+id/otherContactTitle"
@@ -120,7 +125,8 @@
             android:layout_below="@+id/phoneNumber"
             android:layout_toStartOf="@+id/listBtn"
             android:layout_toEndOf="@+id/otherContactTitle"
-            android:fontFamily="@font/jaldi" />
+            android:fontFamily="@font/jaldi"
+            android:textColor="@color/md_theme_onSurface_highContrast" />
 
 
         <TextView
@@ -143,7 +149,8 @@
             android:layout_toStartOf="@+id/listBtn"
             android:layout_toEndOf="@+id/bookedTitle"
             android:fontFamily="@font/jaldi"
-            android:includeFontPadding="false" />
+            android:includeFontPadding="false"
+            android:textColor="@color/md_theme_onSurface_highContrast" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/listBtn"

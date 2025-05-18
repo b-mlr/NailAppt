@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="100dp"
         tools:listitem="@android:layout/activity_list_item"
         >
 

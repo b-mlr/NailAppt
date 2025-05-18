@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Use the {@link AdvertiseFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AdvertiseFragment extends Fragment implements AppointmentAdapter.OnBookListener{
+public class AdvertiseFragment extends Fragment implements AppointmentAdapter.OnBookListener, AppointmentAdapter.OnCallListener{
     private static final String LOG_TAG = AdvertiseFragment.class.getName();
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser =  mAuth.getCurrentUser();
@@ -98,7 +98,7 @@ public class AdvertiseFragment extends Fragment implements AppointmentAdapter.On
         });
 
 
-        mAdapter = new AppointmentAdapter(requireContext(), mAppointmentList, "advertiseFragment",this);
+        mAdapter = new AppointmentAdapter(requireContext(), mAppointmentList, "advertiseFragment",this,this);
 
         adRW = view.findViewById(R.id.adRecycler);
         adRW.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
@@ -146,5 +146,10 @@ public class AdvertiseFragment extends Fragment implements AppointmentAdapter.On
 
     @Override
     public void onBookRequested(Appointment appointment) {
+    }
+
+    @Override
+    public void onCallButtonClicked(String phoneNumber) {
+
     }
 }

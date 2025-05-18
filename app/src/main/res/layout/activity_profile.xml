@@ -64,308 +64,322 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        >
 
-        android:layout_margin="10dp"
-        app:cardCornerRadius="35dp"
-        app:cardElevation="10dp"
-        app:cardPreventCornerOverlap="true">
-
-        <RelativeLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="20dp"
-            >
+            android:layout_height="wrap_content"
 
-            <TextView
-                android:id="@+id/myData"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:fontFamily="@font/jaldi"
-                android:text="@string/ownData"
-                android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+            android:layout_margin="10dp"
+            app:cardBackgroundColor="@color/md_theme_onPrimary"
+            app:cardCornerRadius="35dp"
+            app:cardElevation="10dp"
+            app:cardPreventCornerOverlap="true">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lastNameETLO"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeWidth="2dp"
-                app:errorEnabled="true"
-                android:visibility="gone"
-                >
-                <EditText
-                    android:id="@+id/lastNameET"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp">
+
+                <TextView
+                    android:id="@+id/myData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/jaldi"
+                    android:text="@string/ownData"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lastNameETLO"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/surname"
-                    android:visibility="gone"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:visibility="gone"
+                    app:boxCornerRadiusBottomEnd="16dp"
+                    app:boxCornerRadiusBottomStart="16dp"
+                    app:boxCornerRadiusTopEnd="16dp"
+                    app:boxCornerRadiusTopStart="16dp"
+                    app:boxStrokeWidth="2dp"
+                    app:errorEnabled="true">
 
-            <TextView
-                android:id="@+id/nameTitleTextview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/myData"
-                android:fontFamily="@font/jaldi"
-                android:text="@string/name"
-                android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/lastNameET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/surname"
+                        android:inputType="text"
+                        android:maxLength="155"
+                        android:visibility="gone" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/nameTextview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/myData"
-                android:layout_toEndOf="@+id/nameTitleTextview"
-                android:fontFamily="@font/jaldi"
-                android:textSize="16sp"
-                />
+                <TextView
+                    android:id="@+id/nameTitleTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/myData"
+                    android:fontFamily="@font/jaldi"
+                    android:text="@string/name"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/firstNameETLO"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/lastNameETLO"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeWidth="2dp"
-                app:errorEnabled="true"
-                android:visibility="gone"
-                >
-                <EditText
-                    android:id="@+id/firstNameET"
+                <TextView
+                    android:id="@+id/nameTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/myData"
+                    android:layout_toEndOf="@+id/nameTitleTextview"
+                    android:fontFamily="@font/jaldi"
+                    android:textColor="@color/md_theme_onSurface_highContrast"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/firstNameETLO"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/firstname"
-                    android:visibility="gone"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_below="@+id/lastNameETLO"
+                    android:visibility="gone"
+                    app:boxCornerRadiusBottomEnd="16dp"
+                    app:boxCornerRadiusBottomStart="16dp"
+                    app:boxCornerRadiusTopEnd="16dp"
+                    app:boxCornerRadiusTopStart="16dp"
+                    app:boxStrokeWidth="2dp"
+                    app:errorEnabled="true">
 
-            <TextView
-                android:id="@+id/locationTitleTextview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/nameTextview"
-                android:fontFamily="@font/jaldi"
-                android:text="@string/address"
-                android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/firstNameET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/firstname"
+                        android:inputType="text"
+                        android:maxLength="155"
+                        android:visibility="gone" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/locationTextview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/nameTextview"
-                android:layout_toEndOf="@+id/locationTitleTextview"
-                android:fontFamily="@font/jaldi"
-                android:textSize="16sp"
-                />
+                <TextView
+                    android:id="@+id/locationTitleTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/nameTextview"
+                    android:fontFamily="@font/jaldi"
+                    android:text="@string/address"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/postCodeETLO"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/firstNameETLO"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeWidth="2dp"
-                app:errorEnabled="true"
-                android:visibility="gone"
-                >
-                <EditText
-                    android:id="@+id/postCodeET"
+                <TextView
+                    android:id="@+id/locationTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/nameTextview"
+                    android:layout_toEndOf="@+id/locationTitleTextview"
+                    android:fontFamily="@font/jaldi"
+                    android:textColor="@color/md_theme_onSurface_highContrast"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/postCodeETLO"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/postcode"
-                    android:visibility="gone"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_below="@+id/firstNameETLO"
+                    android:visibility="gone"
+                    app:boxCornerRadiusBottomEnd="16dp"
+                    app:boxCornerRadiusBottomStart="16dp"
+                    app:boxCornerRadiusTopEnd="16dp"
+                    app:boxCornerRadiusTopStart="16dp"
+                    app:boxStrokeWidth="2dp"
+                    app:errorEnabled="true">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/cityETLO"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/postCodeETLO"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeWidth="2dp"
-                app:errorEnabled="true"
-                android:visibility="gone"
-                >
-                <EditText
-                    android:id="@+id/cityET"
+                    <EditText
+                        android:id="@+id/postCodeET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/postcode"
+                        android:inputType="textPostalAddress"
+                        android:maxLength="4"
+                        android:visibility="gone" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/cityETLO"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/address1"
-                    android:visibility="gone"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_below="@+id/postCodeETLO"
+                    android:visibility="gone"
+                    app:boxCornerRadiusBottomEnd="16dp"
+                    app:boxCornerRadiusBottomStart="16dp"
+                    app:boxCornerRadiusTopEnd="16dp"
+                    app:boxCornerRadiusTopStart="16dp"
+                    app:boxStrokeWidth="2dp"
+                    app:errorEnabled="true">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/addressETLO"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/cityETLO"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeWidth="2dp"
-                app:errorEnabled="true"
-                android:visibility="gone"
-                >
-                <EditText
-                    android:id="@+id/addressET"
+                    <EditText
+                        android:id="@+id/cityET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/address1"
+                        android:inputType="text"
+                        android:maxLength="100"
+                        android:visibility="gone" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/addressETLO"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/address2"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_below="@+id/cityETLO"
+                    android:visibility="gone"
+                    app:boxCornerRadiusBottomEnd="16dp"
+                    app:boxCornerRadiusBottomStart="16dp"
+                    app:boxCornerRadiusTopEnd="16dp"
+                    app:boxCornerRadiusTopStart="16dp"
+                    app:boxStrokeWidth="2dp"
+                    app:errorEnabled="true">
 
-            <TextView
-                android:id="@+id/phoneTitleTextview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/locationTextview"
-                android:fontFamily="@font/jaldi"
-                android:text="Telefonszám: "
-                android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/addressET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/address2" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/phoneTextview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/locationTextview"
-                android:layout_toEndOf="@+id/phoneTitleTextview"
-                android:fontFamily="@font/jaldi"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/phoneTitleTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/locationTextview"
+                    android:fontFamily="@font/jaldi"
+                    android:text="Telefonszám: "
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/phoneETLO"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/addressETLO"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeWidth="2dp"
-                app:errorEnabled="true"
-                android:visibility="gone"
-                >
-                <EditText
-                    android:id="@+id/phoneET"
+                <TextView
+                    android:id="@+id/phoneTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/locationTextview"
+                    android:layout_toEndOf="@+id/phoneTitleTextview"
+                    android:fontFamily="@font/jaldi"
+                    android:textColor="@color/md_theme_onSurface_highContrast"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/phoneETLO"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/phoneNum"
-                    android:visibility="gone"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_below="@+id/addressETLO"
+                    android:visibility="gone"
+                    app:boxCornerRadiusBottomEnd="16dp"
+                    app:boxCornerRadiusBottomStart="16dp"
+                    app:boxCornerRadiusTopEnd="16dp"
+                    app:boxCornerRadiusTopStart="16dp"
+                    app:boxStrokeWidth="2dp"
+                    app:errorEnabled="true">
 
-            <TextView
-                android:id="@+id/otherContactTitleTextview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/phoneTextview"
-                android:fontFamily="@font/jaldi"
-                android:text="Egyéb kapcsolat: "
-                android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/phoneET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/phoneNum"
+                        android:inputType="phone"
+                        android:visibility="gone" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/otherContactTextview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/phoneTextview"
-                android:layout_toEndOf="@+id/otherContactTitleTextview"
-                android:fontFamily="@font/jaldi"
-                android:textSize="16sp"
-                />
+                <TextView
+                    android:id="@+id/otherContactTitleTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/phoneTextview"
+                    android:fontFamily="@font/jaldi"
+                    android:text="Egyéb kapcsolat: "
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/otherContactETLO"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/phoneETLO"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeWidth="2dp"
-                app:errorEnabled="true"
-                android:visibility="gone"
-                >
-                <EditText
-                    android:id="@+id/otherContactET"
+                <TextView
+                    android:id="@+id/otherContactTextview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/phoneTextview"
+                    android:layout_toEndOf="@+id/otherContactTitleTextview"
+                    android:fontFamily="@font/jaldi"
+                    android:textColor="@color/md_theme_onSurface_highContrast"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/otherContactETLO"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/othercontact"
-                    android:visibility="gone"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_below="@+id/phoneETLO"
+                    android:visibility="gone"
+                    app:boxCornerRadiusBottomEnd="16dp"
+                    app:boxCornerRadiusBottomStart="16dp"
+                    app:boxCornerRadiusTopEnd="16dp"
+                    app:boxCornerRadiusTopStart="16dp"
+                    app:boxStrokeWidth="2dp"
+                    app:errorEnabled="true">
+
+                    <EditText
+                        android:id="@+id/otherContactET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/othercontact"
+                        android:inputType="text"
+                        android:maxLength="255"
+                        android:visibility="gone" />
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/editBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/otherContactTextview"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:text="@string/editprofile"
-                android:onClick="editProfile"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/editBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/otherContactTextview"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:onClick="editProfile"
+                    android:text="@string/editprofile" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/logoutBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/editBtn"
-                android:layout_centerHorizontal="true"
-                android:onClick="logout"
-                android:text="@string/logout"
-                app:backgroundTint="@color/md_theme_error" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/logoutBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editBtn"
+                    android:layout_centerHorizontal="true"
+                    android:onClick="logout"
+                    android:text="@string/logout"
+                    app:backgroundTint="@color/md_theme_error" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/saveBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/otherContactETLO"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/save"
-                android:visibility="gone" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/saveBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/otherContactETLO"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:onClick="saveProfileChanges"
+                    android:text="@string/save"
+                    android:visibility="gone" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/cancelBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/otherContactETLO"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="10dp"
-                android:onClick="cancelEditing"
-                android:text="@string/cancel"
-                app:backgroundTint="@color/md_theme_error"
-                android:visibility="gone"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancelBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/otherContactETLO"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/cancel"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/md_theme_error" />
 
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
     </ScrollView>
 
     <TextView

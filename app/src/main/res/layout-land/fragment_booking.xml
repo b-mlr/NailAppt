@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".BookingFragment"
+    android:orientation="horizontal">
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
+        app:mcv_firstDayOfWeek="monday"
+        app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:mcv_selectionColor="@color/md_theme_onPrimaryContainer"
+        app:mcv_showOtherDates="all"
+        app:mcv_tileHeight="35dp"
+        app:mcv_tileWidth="40dp"
+        android:layout_marginBottom="80dp"
+        />
+
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/freeAppTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="false"
+            android:layout_centerVertical="false"
+            android:fontFamily="@font/jaldi"
+            android:text="@string/freeappointments"
+            android:textColor="@color/md_theme_onPrimaryContainer"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bookingRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/freeAppTitle"
+        android:layout_marginBottom="80dp"
+        tools:listitem="@android:layout/activity_list_item"
+        >
+    </androidx.recyclerview.widget.RecyclerView>
+    </RelativeLayout>
+</LinearLayout>

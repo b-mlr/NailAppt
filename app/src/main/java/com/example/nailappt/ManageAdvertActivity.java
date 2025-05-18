@@ -115,11 +115,11 @@ public class ManageAdvertActivity extends AppCompatActivity {
 
                 isFormatting = true;
 
-                String input = s.toString().replaceAll("[^\\d]", ""); // csak számokat tartunk meg
+                String input = s.toString().replaceAll("[^\\d]", "");
                 StringBuilder formatted = formatDate(input);
 
                 dateET.setText(formatted.toString());
-                dateET.setSelection(dateET.getText().length()); // kurzor a végére
+                dateET.setSelection(dateET.getText().length());
 
                 isFormatting = false;
 
@@ -317,6 +317,15 @@ public class ManageAdvertActivity extends AppCompatActivity {
             put("address", address);
         }};
 
+        if(postCodeET.getText().toString().trim().isEmpty()){
+            postCodeETLO.setError("A mező kitöltése kötelező!");
+        }
+        if(cityET.getText().toString().trim().isEmpty()){
+            cityETLO.setError("A mező kitöltése kötelező!");
+        }
+        if(addressET.getText().toString().trim().isEmpty()){
+            addressETLO.setError("A mező kitöltése kötelező!");
+        }
         if(isValidDate(date) && isValidTime(time) && ((postCodeETLO.getError() == null || postCodeETLO.getError().toString().isEmpty())) &&
                 ( cityETLO.getError() == null || cityETLO.getError().toString().isEmpty()) &&
                 (addressETLO.getError() == null || addressETLO.getError().toString().isEmpty()))  {

@@ -27,6 +27,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.regex.Matcher;
@@ -46,6 +47,7 @@ public class SignInActivity extends AppCompatActivity {
     Button loginBtn;
     private SharedPreferences preferences;
     private FirebaseAuth mAuth;
+    private final UserRepository userRepo = new UserRepository();
     private GoogleSignInClient mGoogleSignInClient;
 
 
@@ -159,9 +161,6 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 
-
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
@@ -179,20 +178,43 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
+    private void addGoogleUser(FirebaseUser firebaseUser){
+        userRepo.doesUserExist(firebaseUser.getUid()).addOnSuccessListener(exists -> {
+            if ( exists){
+                goToBase();
+            } else {
+                String[] split = firebaseUser.getEmail().split("@");
+                User newUser = new User();
+                newUser.setUid(firebaseUser.getUid());
+                newUser.setEmail(firebaseUser.getEmail());
+                newUser.setLastName(split[0]);
 
+                userRepo.updateUser(newUser).addOnSuccessListener( task ->{
+                    Log.i(LOG_TAG, "Új felhasználó hozzáadva a firestore-hoz!");
+                    goToBase();
+                });
+
+            }
+        }).addOnFailureListener( e -> {
+           Log.e(LOG_TAG, "Hiba: ", e);
+        });
+    }
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken,null);
         mAuth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
             if(task.isSuccessful()){
                 Log.i(LOG_TAG, "Successful Google login: " + idToken);
-                goToBase();
+
+                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                if (firebaseUser != null){
+                    addGoogleUser(firebaseUser);
+                }
             } else {
                 Log.d(LOG_TAG, "Google sign in failed!");
                 Toast.makeText(SignInActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
             }
         });
-
 
     }
 

@@ -225,7 +225,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         Log.i(LOG_TAG, "Regisztrált: " + email + ", jelszó: " + password);
 
-        if(!email.isEmpty() && !password.isEmpty() && !passwordAgain.isEmpty() && !surname.isEmpty() && !firstName.isEmpty() && phoneETLO.getError() == null) {
+        if(!email.isEmpty() && !password.isEmpty()
+                && !passwordAgain.isEmpty() && !surname.isEmpty()
+                && !firstName.isEmpty() && phoneETLO.getError() == null) {
             if(emailETLO.getError() == null && passwordETLO.getError() == null && passwordAgainETLO.getError() == null) {
 
                 mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {

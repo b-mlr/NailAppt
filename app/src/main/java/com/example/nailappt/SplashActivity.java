@@ -2,6 +2,10 @@ package com.example.nailappt;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,17 +29,25 @@ public class SplashActivity extends AppCompatActivity {
             return insets;
         });
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        ImageView logo = findViewById(R.id.splashLogo);
 
-        Intent intent;
-        if(user != null){
-            intent = new Intent(this, BaseActivity.class);
-            intent.putExtra("fragmentToOpen", "booking");
-        } else {
-            intent = new Intent(this, SignInActivity.class);
-        }
-        startActivity(intent);
+        Animation anim = AnimationUtils.loadAnimation(this, R.anim.blink);
+        logo.startAnimation(anim);
+        new Handler().postDelayed(() -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        finish();
+            Intent intent;
+            if(user != null){
+                intent = new Intent(this, BaseActivity.class);
+                intent.putExtra("fragmentToOpen", "booking");
+            } else {
+                intent = new Intent(this, SignInActivity.class);
+            }
+            startActivity(intent);
+
+            finish();
+        }, 3500);
+
+
     }
 }
