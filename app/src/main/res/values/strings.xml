@@ -29,7 +29,7 @@
     <string name="date">Dátum</string>
     <string name="time">Időpont</string>
     <string name="address1">Cím1 (város, falu, község stb.)</string>
-    <string name="cím2">Cím2 (utca, házszám)</string>
+    <string name="address2">Cím2 (utca, házszám)</string>
     <string name="postcode">Irányítószám</string>
     <string name="add">Létrehozás</string>
     <string name="othercontact">Egyéb kapcsolat (pl: instagram)</string>
@@ -39,4 +39,8 @@
     <string name="address">Cím: </string>
     <string name="ownData">Saját adatok</string>
     <string name="myappointments">Időpontjaim</string>
+    <string name="cancel">Mégsem</string>
+    <string name="save">Mentés</string>
+    <string name="logout">Kijelentkezés</string>
+    <string name="editprofile">Profil szerkesztése</string>
 </resources>

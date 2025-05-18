@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,12 +30,38 @@ import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity implements AppointmentAdapter.OnBookListener {
 
+    TextView titleTV;
+    TextView myDataTV;
+    TextView nameTitleTV;
     TextView nameTV;
+    TextView locationTitleTV;
     TextView locationTV;
     TextView phoneTitleTV;
     TextView phoneTV;
     TextView otherContactTitleTV;
     TextView otherContactTV;
+    TextView myAppointmentsTV;
+
+    TextInputLayout lastNameETLO;
+    TextInputLayout firstNameETLO;
+    TextInputLayout postCodeETLO;
+    TextInputLayout cityETLO;
+    TextInputLayout addressETLO;
+    TextInputLayout phoneETLO;
+    TextInputLayout otherContactETLO;
+
+    EditText lastNameET;
+    EditText firstNameET;
+    EditText postCodeET;
+    EditText cityET;
+    EditText addressET;
+    EditText phoneET;
+    EditText otherContactET;
+
+    Button saveBtn;
+    Button cancelBtn;
+    Button editBtn;
+    Button logoutBtn;
 
     private RecyclerView appointmentRW;
     private ArrayList<Appointment> myAppointmentList = new ArrayList<>();
@@ -54,12 +83,37 @@ public class ProfileActivity extends AppCompatActivity implements AppointmentAda
             return insets;
         });
 
+        titleTV = findViewById(R.id.titleTextView);
+        myDataTV = findViewById(R.id.myData);
+        nameTitleTV = findViewById(R.id.nameTitleTextview);
         nameTV = findViewById(R.id.nameTextview);
+        locationTitleTV = findViewById(R.id.locationTitleTextview);
         locationTV = findViewById(R.id.locationTextview);
         phoneTitleTV = findViewById(R.id.phoneTitleTextview);
         phoneTV = findViewById(R.id.phoneTextview);
         otherContactTitleTV = findViewById(R.id.otherContactTitleTextview);
         otherContactTV = findViewById(R.id.otherContactTextview);
+        myAppointmentsTV = findViewById(R.id.myAppointments);
+        editBtn = findViewById(R.id.editBtn);
+        logoutBtn = findViewById(R.id.logoutBtn);
+
+        lastNameETLO = findViewById(R.id.lastNameETLO);
+        lastNameET = findViewById(R.id.lastNameET);
+        firstNameETLO = findViewById(R.id.firstNameETLO);
+        firstNameET = findViewById(R.id.firstNameET);
+        postCodeETLO = findViewById(R.id.postCodeETLO);
+        postCodeET = findViewById(R.id.postCodeET);
+        cityETLO = findViewById(R.id.cityETLO);
+        cityET = findViewById(R.id.cityET);
+        addressETLO = findViewById(R.id.addressETLO);
+        addressET = findViewById(R.id.addressET);
+        phoneETLO = findViewById(R.id.phoneETLO);
+        phoneET = findViewById(R.id.phoneET);
+        otherContactETLO = findViewById(R.id.otherContactETLO);
+        otherContactET = findViewById(R.id.otherContactET);
+        saveBtn = findViewById(R.id.saveBtn);
+        cancelBtn = findViewById(R.id.cancelBtn);
+
 
         mAdapter = new AppointmentAdapter(this, myAppointmentList, "profileActivity", this);
 
@@ -159,6 +213,75 @@ public class ProfileActivity extends AppCompatActivity implements AppointmentAda
 
     @Override
     public void onBookRequested(Appointment appointment) {
+
+    }
+
+    public void cancelEditing(View view) {
+        lastNameETLO.setVisibility(View.GONE);
+        lastNameET.setVisibility(View.GONE);
+        firstNameETLO.setVisibility(View.GONE);
+        firstNameET.setVisibility(View.GONE);
+        postCodeETLO.setVisibility(View.GONE);
+        postCodeET.setVisibility(View.GONE);
+        cityETLO.setVisibility(View.GONE);
+        cityET.setVisibility(View.GONE);
+        addressETLO.setVisibility(View.GONE);
+        addressET.setVisibility(View.GONE);
+        phoneETLO.setVisibility(View.GONE);
+        phoneET.setVisibility(View.GONE);
+        otherContactETLO.setVisibility(View.GONE);
+        otherContactET.setVisibility(View.GONE);
+        saveBtn.setVisibility(View.GONE);
+        cancelBtn.setVisibility(View.GONE);
+
+        titleTV.setText("Profil");
+        myDataTV.setVisibility(View.VISIBLE);
+        myAppointmentsTV.setVisibility(View.VISIBLE);
+        appointmentRW.setVisibility(View.VISIBLE);
+        nameTitleTV.setVisibility(View.VISIBLE);
+        nameTV.setVisibility(View.VISIBLE);
+        locationTitleTV.setVisibility(View.VISIBLE);
+        locationTV.setVisibility(View.VISIBLE);
+        phoneTitleTV.setVisibility(View.VISIBLE);
+        phoneTV.setVisibility(View.VISIBLE);
+        otherContactTitleTV.setVisibility(View.VISIBLE);
+        otherContactTV.setVisibility(View.VISIBLE);
+        editBtn.setVisibility(View.VISIBLE);
+        logoutBtn.setVisibility(View.VISIBLE);
+    }
+
+    public void editProfile(View view) {
+        titleTV.append(" szerkesztése");
+        myDataTV.setVisibility(View.GONE);
+        myAppointmentsTV.setVisibility(View.GONE);
+        appointmentRW.setVisibility(View.GONE);
+        nameTitleTV.setVisibility(View.GONE);
+        nameTV.setVisibility(View.GONE);
+        locationTitleTV.setVisibility(View.GONE);
+        locationTV.setVisibility(View.GONE);
+        phoneTitleTV.setVisibility(View.GONE);
+        phoneTV.setVisibility(View.GONE);
+        otherContactTitleTV.setVisibility(View.GONE);
+        otherContactTV.setVisibility(View.GONE);
+        editBtn.setVisibility(View.GONE);
+        logoutBtn.setVisibility(View.GONE);
+
+        lastNameETLO.setVisibility(View.VISIBLE);
+        lastNameET.setVisibility(View.VISIBLE);
+        firstNameETLO.setVisibility(View.VISIBLE);
+        firstNameET.setVisibility(View.VISIBLE);
+        postCodeETLO.setVisibility(View.VISIBLE);
+        postCodeET.setVisibility(View.VISIBLE);
+        cityETLO.setVisibility(View.VISIBLE);
+        cityET.setVisibility(View.VISIBLE);
+        addressETLO.setVisibility(View.VISIBLE);
+        addressET.setVisibility(View.VISIBLE);
+        phoneETLO.setVisibility(View.VISIBLE);
+        phoneET.setVisibility(View.VISIBLE);
+        otherContactETLO.setVisibility(View.VISIBLE);
+        otherContactET.setVisibility(View.VISIBLE);
+        saveBtn.setVisibility(View.VISIBLE);
+        cancelBtn.setVisibility(View.VISIBLE);
 
     }
 }

@@ -58,13 +58,18 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
         android:layout_margin="10dp"
         app:cardCornerRadius="35dp"
         app:cardElevation="10dp"
@@ -87,6 +92,26 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lastNameETLO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeWidth="2dp"
+                app:errorEnabled="true"
+                android:visibility="gone"
+                >
+                <EditText
+                    android:id="@+id/lastNameET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/surname"
+                    android:visibility="gone"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
             <TextView
                 android:id="@+id/nameTitleTextview"
                 android:layout_width="wrap_content"
@@ -107,6 +132,27 @@
                 android:fontFamily="@font/jaldi"
                 android:textSize="16sp"
                 />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameETLO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lastNameETLO"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeWidth="2dp"
+                app:errorEnabled="true"
+                android:visibility="gone"
+                >
+                <EditText
+                    android:id="@+id/firstNameET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/firstname"
+                    android:visibility="gone"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/locationTitleTextview"
@@ -129,6 +175,68 @@
                 android:textSize="16sp"
                 />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/postCodeETLO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/firstNameETLO"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeWidth="2dp"
+                app:errorEnabled="true"
+                android:visibility="gone"
+                >
+                <EditText
+                    android:id="@+id/postCodeET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/postcode"
+                    android:visibility="gone"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cityETLO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/postCodeETLO"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeWidth="2dp"
+                app:errorEnabled="true"
+                android:visibility="gone"
+                >
+                <EditText
+                    android:id="@+id/cityET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/address1"
+                    android:visibility="gone"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/addressETLO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cityETLO"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeWidth="2dp"
+                app:errorEnabled="true"
+                android:visibility="gone"
+                >
+                <EditText
+                    android:id="@+id/addressET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/address2"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
             <TextView
                 android:id="@+id/phoneTitleTextview"
                 android:layout_width="wrap_content"
@@ -148,6 +256,27 @@
                 android:layout_toEndOf="@+id/phoneTitleTextview"
                 android:fontFamily="@font/jaldi"
                 android:textSize="16sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/phoneETLO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/addressETLO"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeWidth="2dp"
+                app:errorEnabled="true"
+                android:visibility="gone"
+                >
+                <EditText
+                    android:id="@+id/phoneET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/phoneNum"
+                    android:visibility="gone"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/otherContactTitleTextview"
@@ -170,6 +299,28 @@
                 android:textSize="16sp"
                 />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/otherContactETLO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/phoneETLO"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeWidth="2dp"
+                app:errorEnabled="true"
+                android:visibility="gone"
+                >
+                <EditText
+                    android:id="@+id/otherContactET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/othercontact"
+                    android:visibility="gone"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/editBtn"
                 android:layout_width="wrap_content"
@@ -177,7 +328,8 @@
                 android:layout_below="@id/otherContactTextview"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:text="Profil szerkesztése" />
+                android:text="@string/editprofile"
+                android:onClick="editProfile"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/logoutBtn"
@@ -186,17 +338,41 @@
                 android:layout_below="@+id/editBtn"
                 android:layout_centerHorizontal="true"
                 android:onClick="logout"
-                android:text="Kijelentkezés"
+                android:text="@string/logout"
                 app:backgroundTint="@color/md_theme_error" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/otherContactETLO"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/save"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/otherContactETLO"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="10dp"
+                android:onClick="cancelEditing"
+                android:text="@string/cancel"
+                app:backgroundTint="@color/md_theme_error"
+                android:visibility="gone"/>
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
+    </ScrollView>
 
     <TextView
         android:id="@+id/myAppointments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="15dp"
