@@ -6,13 +6,13 @@ import java.util.Map;
 
 public class Appointment {
     public String appointmentID;
-    public String advertiserID;
-    public String bookedByID;
-    public String date;
-    public String time;
-    public Map<String, String> location;
-    public String phoneNum;
-    public String otherContact;
+    private String advertiserID;
+    private String bookedByID;
+    private String date;
+    private String time;
+    private Map<String, String> location;
+    private String phoneNum;
+    private String otherContact;
 
     public Appointment(){};
 

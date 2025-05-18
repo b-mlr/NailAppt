@@ -1,31 +1,48 @@
 package com.example.nailappt;
 
-import android.os.Build;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.Manifest;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
+import android.widget.Toast;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
-import java.sql.Time;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 /**
@@ -33,18 +50,21 @@ import java.util.TimeZone;
  * Use the {@link BookingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BookingFragment extends Fragment {
+public class BookingFragment extends Fragment implements AppointmentAdapter.OnBookListener{
     private static final String LOG_TAG = AdvertiseFragment.class.getName();
+    private static final int REQUEST_CALENDAR_PERMISSION = 100;
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private FirebaseUser currentUser =  mAuth.getCurrentUser();
+
+    private final FirebaseUser currentUser =  mAuth.getCurrentUser();
     private final AppointmentRepository appointmentRepo = new AppointmentRepository();
 
     private RecyclerView adRW;
     private ArrayList<Appointment> mAppointmentList = new ArrayList<>();
-    private List<String> daysWithAppointments = new ArrayList<>();
+    private HashSet<CalendarDay> daysWithAppointments = new HashSet<>();
     private AppointmentAdapter mAdapter;
-    private CalendarView calendarView;
+    private MaterialCalendarView calendarView;
     private String selectedDate;
+    private Appointment pendingAppointment;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -96,7 +116,6 @@ public class BookingFragment extends Fragment {
             mAppointmentList.clear();
         }
 
-
     }
 
     @Override
@@ -105,32 +124,40 @@ public class BookingFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_booking, container, false);
 
-        mAdapter = new AppointmentAdapter(requireContext(), mAppointmentList);
+        mAdapter = new AppointmentAdapter(requireContext(), mAppointmentList, "bookingFragment", this);
 
         adRW = view.findViewById(R.id.bookingRecycler);
         adRW.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         adRW.setAdapter(mAdapter);
 
-        calendarView = view.findViewById(R.id.calendar);
+        calendarView = view.findViewById(R.id.calendarView);
 
-        calendarView.setMinDate((new Date().getTime()));
+        calendarView.state().edit().setMinimumDate(CalendarDay.today().getDate());
+        Log.i(LOG_TAG,CalendarDay.today().getDate().toString());
 
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        fillDaysWithAppointments();
+
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                Log.i(LOG_TAG, "Kiválasztott dátum: " + year + " " + month + " " + dayOfMonth);
-                if((month+1) < 10){
-                    selectedDate = year + "-0" + (month+1) + "-" + dayOfMonth;
-                } else {
-                    selectedDate = year + "-" + (month+1) + "-" + dayOfMonth;
-                }
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                selectedDate = calendarDayToString(date);
+                Log.i(LOG_TAG, "Formatted date: " + selectedDate);
 
-                if(mAppointmentList != null){
+
+                if (mAppointmentList != null) {
                     mAppointmentList.clear();
                 }
 
                 fillAppointmentList();
+            }
+        });
 
+        calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
+            @Override
+            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+                int year = date.getYear();
+                int month = date.getMonth();
+                Log.i(LOG_TAG, "Hónap változott: " + year + "-" + month);
             }
         });
 
@@ -153,4 +180,181 @@ public class BookingFragment extends Fragment {
                 .addOnFailureListener(e -> Log.e(LOG_TAG, "Hiba a lekérdezésben: ", e));
     }
 
+    public void fillDaysWithAppointments(){
+        appointmentRepo.getAllAvailableAppointments(currentUser.getUid()).addOnSuccessListener( querySnapshots -> {
+           for ( DocumentSnapshot document : querySnapshots){
+               Appointment appointment = document.toObject(Appointment.class);
+               CalendarDay date = stringToCalendarDay(appointment.getDate());
+               daysWithAppointments.add(date);
+           }
+           AppointmentDecorator appointmentDecorator = new AppointmentDecorator(daysWithAppointments);
+
+           calendarView.addDecorator(appointmentDecorator);
+           Log.i(LOG_TAG, "daysWithAppointments: " + daysWithAppointments);
+        });
+    }
+
+    private String calendarDayToString(CalendarDay date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(date.getYear(), date.getMonth(),date.getDay());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        return dateFormat.format(calendar.getTime());
+    }
+
+    private CalendarDay stringToCalendarDay(String date){
+        String[] parts = date.split("-");
+        if(parts.length == 3){
+            int year = Integer.parseInt(parts[0]);
+            if(parts[1].startsWith("0")){
+                parts[1] = parts[1].substring(1);
+            }
+            int month = Integer.parseInt(parts[1]);
+            if(parts[2].startsWith("0")){
+                parts[2] = parts[2].substring(1);
+            }
+            int day = Integer.parseInt(parts[2]);
+            Log.i(LOG_TAG, "stringtocalendarday: " + CalendarDay.from(year,month,day));
+            return CalendarDay.from(year,month-1,day);
+        } else {
+            return null;
+        }
+    }
+
+    private void requestCalendarPermission() throws UnsupportedEncodingException {
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Időpont mentése naptárba")
+                .setMessage("Szeretné hozzáadni az időpontot a naptárához?")
+                .setNegativeButton("Nem", ((dialog2, which2) -> {
+                    dialog2.dismiss();
+                }))
+                .setPositiveButton("OK", ((dialog2, which2) -> {
+                    if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_CALENDAR)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.WRITE_CALENDAR}, REQUEST_CALENDAR_PERMISSION);
+                    } else {
+                        try {
+                            addEventToCalendar(pendingAppointment);
+                        } catch (UnsupportedEncodingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }))
+                .show();
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CALENDAR_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission megadva - itt indítsd el a calendar hozzáadást
+                try {
+                    addEventToCalendar(pendingAppointment);
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                // Permission megtagadva - jelezd a usernek, vagy kezeld le
+                Toast.makeText(requireContext(), "Naptár írási engedély szükséges a foglaláshoz", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void addEventToCalendar(Appointment appointment) throws UnsupportedEncodingException {
+        Calendar beginTime = Calendar.getInstance();
+        // Feltételezem, hogy az Appointment tartalmazza a dátumot és időpontot
+        // Itt például parse-oljuk a dátumot és az időt, és beállítjuk beginTime-ot
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+            beginTime.setTime(sdf.parse(appointment.getDate() + " " + appointment.getTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            beginTime = Calendar.getInstance(); // fallback most
+        }
+
+        long startMillis = beginTime.getTimeInMillis();
+        long endMillis = startMillis + 60 * 60 * 1000; // 1 óra hosszú esemény például
+
+        Log.i(LOG_TAG,startMillis + " " + endMillis);
+
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startMillis)
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endMillis)
+                .putExtra(CalendarContract.Events.TITLE, "Műkörmös időpont")
+                .putExtra(CalendarContract.Events.DESCRIPTION, "Lefoglalt műkörmös időpont")
+                .putExtra(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
+
+        if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
+            requireActivity().startActivity(intent);
+        } else {
+            String[] splitdate = appointment.getDate().split("-");
+            String[] splittime = appointment.getTime().split(":");
+            String datetime = splitdate[0] + splitdate[1] + splitdate[2] + "T" + splittime[0] + splittime[1] + "00Z";
+            String title = "Időpont: műköröm";
+            String details = "Lefoglalt műkörmös időpont";
+            String beginTimeUtc = URLEncoder.encode(datetime, "UTF-8"); // ISO formátumban
+            //String endTimeUtc = URLEncoder.encode(datetime, "UTF-8");
+
+            String url = "https://www.google.com/calendar/render?action=TEMPLATE"
+                    + "&text=" + URLEncoder.encode(title, "UTF-8")
+                    + "&details=" + URLEncoder.encode(details, "UTF-8")
+                    + "&dates=" + beginTimeUtc ;
+
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        }
+    }
+
+    @Override
+    public void onBookRequested(Appointment currentAppointment) {
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Időpont foglalása")
+                .setMessage("Biztosan le szeretné foglalni ezt az időpontot?")
+                .setNegativeButton("Mégse", ((dialog, which) -> {
+                    dialog.dismiss();
+                }))
+                .setPositiveButton("Foglalás", ((dialog, which) -> {
+                    String appointmentId = currentAppointment.getAppointmentID();
+
+                    appointmentRepo.bookAppointment(appointmentId, currentUser.getUid()).addOnSuccessListener(task -> {
+                        Toast successToast = Toast.makeText(requireContext(), "Sikeres foglalás!", Toast.LENGTH_SHORT);
+                        successToast.show();
+
+                        this.pendingAppointment = currentAppointment;
+                        try {
+                            requestCalendarPermission();
+                        } catch (UnsupportedEncodingException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }).addOnFailureListener(e -> {
+                        Log.e(LOG_TAG, "Foglalási hiba: " + e);
+                        Toast.makeText(requireContext(), "Hiba történt a foglaláskor", Toast.LENGTH_SHORT).show();
+                    });
+                }))
+                .show();
+    }
+
+    public void onStart() {
+        super.onStart();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(requireContext(), SignInActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        daysWithAppointments.clear();
+        fillDaysWithAppointments();
+    }
 }

@@ -26,6 +26,21 @@ public class AppointmentRepository {
         return appointmentsRef.document(appointment.getAppointmentID()).set(appointment);
     }
 
+    public Task<Void> deleteAppointment(String appointmentID){
+        return appointmentsRef.document(appointmentID).delete();
+    }
+
+    public Task<Void> bookAppointment(String appointmentID, String bookedByID){
+        DocumentReference docRef = appointmentsRef.document(appointmentID);
+
+        return docRef.update("bookedByID", bookedByID);
+
+    }
+
+    public Task<Void> cancelAppointment(String appointmentID) {
+        DocumentReference docRef = appointmentsRef.document(appointmentID);
+        return docRef.update("bookedByID", "null");
+    }
     public Task<DocumentSnapshot> getAppointmentByID(String appointmentID){
         return appointmentsRef.document(appointmentID).get();
     }
@@ -34,12 +49,17 @@ public class AppointmentRepository {
         return appointmentsRef.whereEqualTo("advertiserID", uid).orderBy("date", Query.Direction.ASCENDING).get();
     }
 
-    public Task<Void> deleteAppointment(String appointmentID){
-        return appointmentsRef.document(appointmentID).delete();
+    public Task<QuerySnapshot> freeAppointmentsByDate(String selectedDate, String uid){
+        return appointmentsRef.whereEqualTo("date",selectedDate).whereNotEqualTo("advertiserID",uid).whereEqualTo("bookedByID","null").get();
     }
 
-    public Task<QuerySnapshot> freeAppointmentsByDate(String selectedDate, String uid){
-        return appointmentsRef.whereEqualTo("date",selectedDate).whereNotEqualTo("advertiserID",uid).get();
+    public Task<QuerySnapshot> getAllAvailableAppointments(String uid){
+        return appointmentsRef.whereEqualTo("bookedByID","null").whereNotEqualTo("advertiserID",uid).get();
     }
+
+    public Task<QuerySnapshot> getMyAppointments(String uid) {
+        return appointmentsRef.whereEqualTo("bookedByID", uid).orderBy("date", Query.Direction.ASCENDING).orderBy("time", Query.Direction.ASCENDING).get();
+    }
+
 
 }

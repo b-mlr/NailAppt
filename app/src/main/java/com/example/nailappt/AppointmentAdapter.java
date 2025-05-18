@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -26,16 +25,22 @@ import java.util.Map;
 public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.Viewholder>{
     private ArrayList<Appointment> mAppointmentsData;
     private Context mContext;
+    private String mode;
 
+    public interface OnBookListener {
+        void onBookRequested(Appointment appointment);
+    }
+    private final OnBookListener bookListener;
     private final UserRepository userRepo = new UserRepository();
     private final AppointmentRepository appointmentRepo = new AppointmentRepository();
     private static final String LOG_TAG = AdvertiseFragment.class.getName();
 
 
-
-    AppointmentAdapter(Context context, ArrayList<Appointment> appointmentsData){
+    AppointmentAdapter(Context context, ArrayList<Appointment> appointmentsData, String mode, OnBookListener listener){
         this.mAppointmentsData = (appointmentsData != null) ? appointmentsData : new ArrayList<>();
         this.mContext = context;
+        this.mode = mode;
+        this.bookListener = listener;
     }
 
     @Override
@@ -48,36 +53,73 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         Appointment currentAppointment = mAppointmentsData.get(position);
         holder.bindTo(currentAppointment);
 
-        holder.mDeleteBtn.setOnClickListener(v -> {
-            new MaterialAlertDialogBuilder(holder.itemView.getContext())
-                    .setTitle("Időpont törlése")
-                    .setMessage("Biztosan törölni szeretné ezt az időpontot?")
-                    .setNegativeButton("Mégse", ((dialog, which) -> {dialog.dismiss();}))
-                    .setPositiveButton("Törlés", ((dialog, which) -> {
-                        String appointmentId = currentAppointment.getAppointmentID();
+        if("advertiseFragment".equals(mode)) {
+            holder.mDeleteBtn.setOnClickListener(v -> {
+                new MaterialAlertDialogBuilder(holder.itemView.getContext())
+                        .setTitle("Időpont törlése")
+                        .setMessage("Biztosan törölni szeretné ezt az időpontot?")
+                        .setNegativeButton("Mégse", ((dialog, which) -> {
+                            dialog.dismiss();
+                        }))
+                        .setPositiveButton("Törlés", ((dialog, which) -> {
+                            String appointmentId = currentAppointment.getAppointmentID();
 
-                        appointmentRepo.deleteAppointment(appointmentId).addOnSuccessListener(task -> {
-                            Toast successToast = Toast.makeText(holder.itemView.getContext(), "Sikeres törlés!", Toast.LENGTH_SHORT);
-                            successToast.show();
+                            appointmentRepo.deleteAppointment(appointmentId).addOnSuccessListener(task -> {
+                                Toast successToast = Toast.makeText(holder.itemView.getContext(), "Sikeres törlés!", Toast.LENGTH_SHORT);
+                                successToast.show();
 
-                            if (position != RecyclerView.NO_POSITION) {
-                                mAppointmentsData.remove(position);
-                                notifyItemRemoved(position);
-                            }
+                                if (position != RecyclerView.NO_POSITION) {
+                                    mAppointmentsData.remove(position);
+                                    notifyItemRemoved(position);
+                                }
 
-                        }).addOnFailureListener(e -> {
-                            Log.e(LOG_TAG, "Törlés hiba: " + e.getMessage());
-                            Toast.makeText(holder.itemView.getContext(), "Hiba történt a törléskor", Toast.LENGTH_SHORT).show();
-                        });
-                    }))
-                    .show();
-        });
+                            }).addOnFailureListener(e -> {
+                                Log.e(LOG_TAG, "Törlés hiba: " + e.getMessage());
+                                Toast.makeText(holder.itemView.getContext(), "Hiba történt a törléskor", Toast.LENGTH_SHORT).show();
+                            });
+                        }))
+                        .show();
+            });
 
-        holder.mListBtn.setOnClickListener( v -> {
-            Intent intent = new Intent(mContext, ManageAdvertActivity.class);
-            intent.putExtra("appointmentID", currentAppointment.getAppointmentID());
-            mContext.startActivity(intent);
-        });
+            holder.mListBtn.setOnClickListener(v -> {
+                Intent intent = new Intent(mContext, ManageAdvertActivity.class);
+                intent.putExtra("appointmentID", currentAppointment.getAppointmentID());
+                mContext.startActivity(intent);
+            });
+        }  else if ("profileActivity".equals(mode)){
+            holder.mDeleteBtn.setOnClickListener(v -> {
+                new MaterialAlertDialogBuilder(holder.itemView.getContext())
+                        .setTitle("Időpont lemondása")
+                        .setMessage("Biztosan le szeretné mondani ezt az időpontot?")
+                        .setNegativeButton("Mégse", ((dialog, which) -> {
+                            dialog.dismiss();
+                        }))
+                        .setPositiveButton("Lemondás", ((dialog, which) -> {
+                            String appointmentId = currentAppointment.getAppointmentID();
+
+                            appointmentRepo.cancelAppointment(appointmentId).addOnSuccessListener(task -> {
+                                Toast successToast = Toast.makeText(holder.itemView.getContext(), "Sikeres lemondás!", Toast.LENGTH_SHORT);
+                                successToast.show();
+
+                                if (position != RecyclerView.NO_POSITION) {
+                                    mAppointmentsData.remove(position);
+                                    notifyItemRemoved(position);
+                                }
+
+                            }).addOnFailureListener(e -> {
+                                Log.e(LOG_TAG, "Törlés hiba: " + e.getMessage());
+                                Toast.makeText(holder.itemView.getContext(), "Hiba történt a lemondáskor", Toast.LENGTH_SHORT).show();
+                            });
+                        }))
+                        .show();
+            });
+        } else if ("bookingFragment".equals(mode)){
+            holder.mListBtn.setOnClickListener( v -> {
+                if ( bookListener != null){
+                    bookListener.onBookRequested(currentAppointment);
+                }
+            });
+        }
     }
 
     @Override
@@ -115,9 +157,15 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
             mBookedByTitle = itemView.findViewById(R.id.bookedTitle);
             mLocation = itemView.findViewById(R.id.location);
             mListBtn = itemView.findViewById(R.id.listBtn);
-            mListBtn.setIcon(ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_editapp));
-            mListBtn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#864B6F")));
             mDeleteBtn = itemView.findViewById(R.id.deleteBtn);
+            if("advertiseFragment".equals(mode)) {
+                mListBtn.setIcon(ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_editapp));
+                mListBtn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#864B6F")));
+            } else if("bookingFragment".equals(mode)){
+                mDeleteBtn.setVisibility(View.GONE);
+            } else if("profileActivity".equals(mode)){
+                mListBtn.setVisibility(View.GONE);
+            }
 
 
         }
@@ -170,6 +218,8 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
 
         }
     }
+
 }
+
 
 

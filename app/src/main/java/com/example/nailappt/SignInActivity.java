@@ -122,7 +122,9 @@ public class SignInActivity extends AppCompatActivity {
     private void goToBase(){
         Intent intent = new Intent(this, BaseActivity.class);
         intent.putExtra("fragmentToOpen", "booking");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        finish();
     }
 
     public void login(View view){
@@ -192,18 +194,6 @@ public class SignInActivity extends AppCompatActivity {
         });
 
 
-    }
-
-    public void loginAsGuest(View view) {
-        mAuth.signInAnonymously().addOnCompleteListener(this, task -> {
-            if(task.isSuccessful()){
-                Log.i(LOG_TAG, "Successful login: guest user");
-                goToBase();
-            } else {
-                Log.d(LOG_TAG,"Login unsuccessful!");
-                Toast.makeText(SignInActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     public void loginWithGoogle(View view) {

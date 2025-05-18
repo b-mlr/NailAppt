@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Use the {@link AdvertiseFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AdvertiseFragment extends Fragment {
+public class AdvertiseFragment extends Fragment implements AppointmentAdapter.OnBookListener{
     private static final String LOG_TAG = AdvertiseFragment.class.getName();
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser =  mAuth.getCurrentUser();
@@ -98,7 +98,7 @@ public class AdvertiseFragment extends Fragment {
         });
 
 
-        mAdapter = new AppointmentAdapter(requireContext(), mAppointmentList);
+        mAdapter = new AppointmentAdapter(requireContext(), mAppointmentList, "advertiseFragment",this);
 
         adRW = view.findViewById(R.id.adRecycler);
         adRW.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
@@ -108,6 +108,17 @@ public class AdvertiseFragment extends Fragment {
         Log.d(LOG_TAG, "Appointments list size: " + mAppointmentList.size() +"\n GetItemCount:" + mAdapter.getItemCount());
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(requireContext(), SignInActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -133,4 +144,7 @@ public class AdvertiseFragment extends Fragment {
         super.onDestroy();
     }
 
+    @Override
+    public void onBookRequested(Appointment appointment) {
+    }
 }

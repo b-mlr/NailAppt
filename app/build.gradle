@@ -44,4 +44,6 @@ dependencies {
     implementation platform(libs.firebase.bom)
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation libs.play.services.auth
+    implementation 'com.prolificinteractive:material-calendarview:1.4.3'
+
 }

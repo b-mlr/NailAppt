@@ -7,17 +7,18 @@
     tools:context=".BookingFragment"
     android:orientation="vertical">
 
-    <CalendarView
-        android:id="@+id/calendar"
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Body2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginTop="30dp"
+        app:mcv_firstDayOfWeek="monday"
+        app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:mcv_selectionColor="@color/md_theme_onPrimaryContainer"
+        app:mcv_showOtherDates="all"
+        app:mcv_tileHeight="35dp"
+        />
 
-    </CalendarView>
 
     <TextView
         android:id="@+id/freeAppTitle"
